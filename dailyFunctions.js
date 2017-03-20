@@ -33,13 +33,13 @@
 	/**
 	 * Basic toggle function.
 	 * 
-	 * @private
+	 * @public
 	 * @param  {string|object}
 	 * @param  {string|object}
 	 * @param  {bool}
 	 * @return {void}
 	 */
-	var basicInteractionInit = function(container, trigger, prevent) {
+	Global.basicInteractionInit = function(container, trigger, prevent) {
 		var $container = $(container);
 		var $trigger = $(trigger);
 
@@ -70,20 +70,20 @@
 	 *
 	 * Check if event's target matches given selectors or esc key is pressed.
 	 * 
-	 * @private
+	 * @public
 	 * @param  {event}
 	 * @param  {string|Object}
 	 * @return {void}
 	 */
-	var basicInteractionHide = function(event, selectorsString) {
-		var evt = event || window.event;
-		var $target = $(evt.target);
-
+	Global.basicInteractionHide = function(event, selectorsString) {
 		// stop execution when parameters are not valid
 		if (typeof event === 'undefined' || !$(selectorsString).length) {
 			console.log('basicInteractionHide: Invalid parameters!');
 			return;
 		}
+
+		var evt = event || window.event;
+		var $target = $(evt.target);
 
 		if ((!$target.closest(selectorsString).length) || (event.keyCode == 27 /* esc key*/)) {
 			$(selectorsString).removeClass('isActive');
