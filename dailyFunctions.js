@@ -91,75 +91,14 @@
 	};
 
 	/**
-	 * Field's labels moving effect.
-	 *
-	 * @private
-	 * @return {void}
-	 */
-	var blinkFieldsInit = function() {
-		var $inputs = $('.field').find('input, textarea');
-
-		$inputs.each(function() {
-			if($(this).val()) {
-				$(this).closest('.field').addClass('isActive');
-			} else {
-				$(this).closest('.field').removeClass('isActive');
-			}
-		});
-
-		$inputs.on('focusin', function() {
-			$(this).closest('.field').addClass('isActive');
-		}).on('focusout', function() {
-			if(!$(this).val()) {
-				$(this).closest('.field').removeClass('isActive');
-			}
-		});
-	};
-
-	/**
-	 * Check if element is within the viewport.
-	 *
-	 * @private
-	 * @param  {string|Object}
-	 * @param  {bool} Default value true.
-	 * @return {void}
-	 */
-	var checkPosition = function(elements, removeClass) {
-		// set default values
-		removeClass = (typeof removeClass == 'undefined') ? true : removeClass;
-		elements = (typeof elements == 'undefined') ? '.animate' : elements;
-		
-		var $animationItems = $(elements);
-		var winH = $win.height();
-		var winTopPos = $win.scrollTop();
-		var winBottomPos = (winTopPos + winH);
-
-		$.each($animationItems, function() {
-			var $element = $(this);
-			var elementH = $element.outerHeight();
-			var elementTopPos = $element.offset().top;
-			var elementBottomPos = (elementTopPos + elementH);
-
-			//check if this current container is within viewport
-			if ((elementBottomPos >= winTopPos) && (elementTopPos <= winBottomPos)) {
-				$element.addClass('isActive');
-			} else {
-				if (removeClass) {
-					$element.removeClass('isActive');
-				}
-			}
-		});
-	};
-
-	/**
 	 * Scroll the window to selector from trigger's data-target attribute.
 	 *
-	 * @private
+	 * @public
 	 * @param  {string|object}
 	 * @param  {int} Default value 0.
 	 * @return {void}
 	 */
-	var scrollToSelectorInit = function(trigger, offsetTop) {
+	Global.scrollToSelectorInit = function(trigger, offsetTop) {
 		var $trigger = $(trigger);
 
 		// stop execution when element does not exist
@@ -340,6 +279,67 @@
 			event.preventDefault();
 		});
 	}
+
+	/**
+	 * Field's labels moving effect.
+	 *
+	 * @private
+	 * @return {void}
+	 */
+	var blinkFieldsInit = function() {
+		var $inputs = $('.field').find('input, textarea');
+
+		$inputs.each(function() {
+			if($(this).val()) {
+				$(this).closest('.field').addClass('isActive');
+			} else {
+				$(this).closest('.field').removeClass('isActive');
+			}
+		});
+
+		$inputs.on('focusin', function() {
+			$(this).closest('.field').addClass('isActive');
+		}).on('focusout', function() {
+			if(!$(this).val()) {
+				$(this).closest('.field').removeClass('isActive');
+			}
+		});
+	};
+
+	/**
+	 * Check if element is within the viewport.
+	 *
+	 * @private
+	 * @param  {string|Object}
+	 * @param  {bool} Default value true.
+	 * @return {void}
+	 */
+	var checkPosition = function(elements, removeClass) {
+		// set default values
+		removeClass = (typeof removeClass == 'undefined') ? true : removeClass;
+		elements = (typeof elements == 'undefined') ? '.animate' : elements;
+		
+		var $animationItems = $(elements);
+		var winH = $win.height();
+		var winTopPos = $win.scrollTop();
+		var winBottomPos = (winTopPos + winH);
+
+		$.each($animationItems, function() {
+			var $element = $(this);
+			var elementH = $element.outerHeight();
+			var elementTopPos = $element.offset().top;
+			var elementBottomPos = (elementTopPos + elementH);
+
+			//check if this current container is within viewport
+			if ((elementBottomPos >= winTopPos) && (elementTopPos <= winBottomPos)) {
+				$element.addClass('isActive');
+			} else {
+				if (removeClass) {
+					$element.removeClass('isActive');
+				}
+			}
+		});
+	};
 
 	/**
 	 * Calculates viewport's min height.
