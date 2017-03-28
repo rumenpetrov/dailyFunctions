@@ -379,6 +379,42 @@
 		}
 	};
 
+	/**
+	 * Change image background on hover.
+	 * 
+	 * @return {void}
+	 */
+	Global.imageChangerInit = function() {
+		var $target = $('#jsImageChangerTarget');
+		var $triggers = $('.jsImageChangerTrigger');
+
+		// stop execution when parameters are not valid
+		if (!$target.length || !$triggers.length) {
+			console.log('imageChanger: Invalid parameters!');
+			return;
+		}
+
+		function changeSource(src) {
+			$target.css({
+				'background-image': 'url(' + src + ')'
+			});
+		}
+
+		changeSource($($triggers[0]).data('bg'));
+
+		$triggers.on('mouseenter', function() {
+			var $this = $(this);
+
+			// stop execution when data-bg attribute missing or is not set
+			if (!($this.attr('data-bg')) || !$this.data('bg').length) {
+				console.log('Invalid \"data-bg\" attribute!');
+				return;
+			}
+
+			changeSource($this.data('bg'));
+		});
+	};
+
 	/* ------------------------------------------------------------ *\
 		#EVENT BINDS
 	\* ------------------------------------------------------------ */
