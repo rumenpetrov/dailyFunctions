@@ -133,28 +133,36 @@
 	 * @public
 	 * @param  {string|Object}
 	 * @param  {string|Object}
+	 * @param  {string|Object}
 	 * @return {void}
 	 */
-	Global.sticky = function(element, pivot) {
+	Global.sticky = function(element, pivotTop, pivotBottom) {
 		var $element = $(element);
+		var $pivotTop = $(pivotTop);
+		var $pivotBottom = $(pivotBottom);
+		var offsetTop;
+		var offsetBottom;
 	
 		// stop execution when parameters are not valid
-		if ($element.length === 0) return;
-
-		var $pivot = $(pivot);
-		var offset = $pivot.offset().top - $('#jsHeader').outerHeight();
-
-		if ($win.scrollTop() > offset) {
-			$element.addClass('isActive');
-			$pivot.css({
-				'height': $element.outerHeight()
-			});
+		if ($element.length === 0 || $pivotTop.length === 0 || $pivotBottom.length === 0) {
+			// console.log('sticky: Invalid parameters!');
+			return;
 		}
-		else {
-			$element.removeClass('isActive');
-			$pivot.css({
-				'height': 0
-			});
+
+		// get pivot's offsets
+		offsetTop = $pivotTop.offset().top;
+		offsetBottom = $pivotBottom.offset().top;
+
+		if ($win.scrollTop() > offsetTop) {
+			$element.addClass('isSticky');
+		} else {
+			$element.removeClass('isSticky');
+		}
+
+		if ($win.scrollTop() > offsetBottom - $element.outerHeight()) {
+			$element.addClass('hasBoundary');
+		} else {
+			$element.removeClass('hasBoundary');
 		}
 	};
 
