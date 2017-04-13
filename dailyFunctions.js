@@ -99,8 +99,6 @@
 					var $this = $(selectors[j]);
 					
 					if ($this.hasClass('isActive')) {
-						console.log($target);
-						
 						$this.removeClass('isActive');
 					}
 				}
