@@ -34,17 +34,17 @@
 	 * Basic toggle function.
 	 * 
 	 * @public
-	 * @param  {string|object}
-	 * @param  {string|object}
-	 * @param  {bool}
+	 * @param  {string|Object} Requre ID.
+	 * @param  {string|Object} Requre ID.
+	 * @param  {bool} Default value true.
 	 * @return {void}
 	 */
-	Global.basicInteractionInit = function(container, trigger, prevent) {
-		var $container = $(container);
+	Global.basicInteractionInit = function(trigger, related, prevent) {
 		var $trigger = $(trigger);
+		var $related = $(related);
 
 		// stop execution when parameters are not valid
-		if (!$container.length || !$trigger.length) {
+		if (!$trigger.length || !$related.length) {
 			console.log('basicInteractionInit: Invalid parameters!');
 			return;
 		}
@@ -57,10 +57,10 @@
 
 			if ($trigger.hasClass('isActive')) {
 				$trigger.removeClass('isActive');
-				$container.removeClass('isActive');
+				$related.removeClass('isActive');
 			} else {
 				$trigger.addClass('isActive');
-				$container.addClass('isActive');
+				$related.addClass('isActive');
 			}
 		});
 	};
@@ -72,21 +72,39 @@
 	 * 
 	 * @public
 	 * @param  {event}
-	 * @param  {string|Object}
+	 * @param  {Array}
 	 * @return {void}
 	 */
-	Global.basicInteractionHide = function(event, selectorsString) {
+	Global.basicInteractionHide = function(evt, selectors) {
+
 		// stop execution when parameters are not valid
-		if (typeof event === 'undefined' || !$(selectorsString).length) {
+		if (typeof evt === 'undefined' || !$(selectors).length) {
 			console.log('basicInteractionHide: Invalid parameters!');
 			return;
 		}
 
-		var evt = event || window.event;
 		var $target = $(evt.target);
+		var evtType = evt.type;
 
-		if ((!$target.closest(selectorsString).length) || (event.keyCode == 27 /* esc key*/)) {
-			$(selectorsString).removeClass('isActive');
+		// filter events
+		if (evtType === 'keyup' && evt.keyCode === 27 /* esc key*/) {
+			for (var i = 0; i < selectors.length; i++) {
+				$(selectors[i]).removeClass('isActive');
+			}
+		} 
+
+		if (evtType === 'click' || evtType === 'touchstart') {
+			for (var j = 0; j < selectors.length; j++) {
+				if (!$target.closest(selectors[j]).length) {
+					var $this = $(selectors[j]);
+					
+					if ($this.hasClass('isActive')) {
+						console.log($target);
+						
+						$this.removeClass('isActive');
+					}
+				}
+			}
 		}
 	};
 
@@ -94,7 +112,7 @@
 	 * Scroll the window to selector from trigger's data-target attribute.
 	 *
 	 * @public
-	 * @param  {string|object}
+	 * @param  {string|Object}
 	 * @param  {int} Default value 0.
 	 * @return {void}
 	 */
