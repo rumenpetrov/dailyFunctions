@@ -34,17 +34,17 @@
 	 * Basic toggle function.
 	 * 
 	 * @public
-	 * @param  {string|Object} Requre ID.
-	 * @param  {string|Object} Requre ID.
-	 * @param  {bool} Default value true.
+	 * @param  {string|object}
+	 * @param  {string|object}
+	 * @param  {bool}
 	 * @return {void}
 	 */
-	Global.basicInteractionInit = function(trigger, related, prevent) {
+	Global.basicInteractionInit = function(container, trigger, prevent) {
+		var $container = $(container);
 		var $trigger = $(trigger);
-		var $related = $(related);
 
 		// stop execution when parameters are not valid
-		if (!$trigger.length || !$related.length) {
+		if (!$container.length || !$trigger.length) {
 			console.log('basicInteractionInit: Invalid parameters!');
 			return;
 		}
@@ -57,10 +57,10 @@
 
 			if ($trigger.hasClass('isActive')) {
 				$trigger.removeClass('isActive');
-				$related.removeClass('isActive');
+				$container.removeClass('isActive');
 			} else {
 				$trigger.addClass('isActive');
-				$related.addClass('isActive');
+				$container.addClass('isActive');
 			}
 		});
 	};
@@ -72,42 +72,21 @@
 	 * 
 	 * @public
 	 * @param  {event}
-	 * @param  {Array}
+	 * @param  {string|Object}
 	 * @return {void}
 	 */
-	Global.basicInteractionHide = function(evt, selectors) {
-
+	Global.basicInteractionHide = function(event, selectorsString) {
 		// stop execution when parameters are not valid
-		if (typeof evt === 'undefined' || !$(selectors).length) {
+		if (typeof event === 'undefined' || !$(selectorsString).length) {
 			console.log('basicInteractionHide: Invalid parameters!');
 			return;
 		}
 
+		var evt = event || window.event;
 		var $target = $(evt.target);
-		var evtType = evt.type;
 
-		// filter events
-		if (evtType === 'keyup' && evt.keyCode === 27 /* esc key*/) {
-			for (var i = 0; i < selectors.length; i++) {
-				$(selectors[i]).removeClass('isActive');
-			}
-		} 
-
-		if (evtType === 'click' || evtType === 'touchstart') {
-			for (var j = 0; j < selectors.length; j++) {
-				
-				console.log(selectors[j], !$target.closest(selectors[j]).length);
-
-				if (!$target.closest(selectors[j]).length) {
-					var $this = $(selectors[j]);
-					
-					console.log($target, selectors[j]);
-
-					if ($this.hasClass('isActive')) {
-						$this.removeClass('isActive');
-					}
-				}
-			}
+		if ((!$target.closest(selectorsString).length) || (event.keyCode == 27 /* esc key*/)) {
+			$(selectorsString).removeClass('isActive');
 		}
 	};
 
