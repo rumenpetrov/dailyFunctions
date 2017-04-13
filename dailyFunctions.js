@@ -95,9 +95,14 @@
 
 		if (evtType === 'click' || evtType === 'touchstart') {
 			for (var j = 0; j < selectors.length; j++) {
+				
+				console.log(selectors[j], !$target.closest(selectors[j]).length);
+
 				if (!$target.closest(selectors[j]).length) {
 					var $this = $(selectors[j]);
 					
+					console.log($target, selectors[j]);
+
 					if ($this.hasClass('isActive')) {
 						$this.removeClass('isActive');
 					}
