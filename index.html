@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8" />
+	<link rel="shortcut icon" type="image/x-icon" href="assets/images/favicon.png" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<title>Daily Functions</title>
+	<!-- <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"> -->
+
+	<style>
+		* { padding: 0; margin: 0; outline: 0; }
+
+		h1,
+		h2,
+		h3,
+		h4,
+		h5,
+		h6 {
+			padding-bottom: 10px;
+			text-align: center;
+		}
+
+		.accordion { padding: 20px; }
+		.accordionItem { margin: 0 20px 10px; }
+		.accordionItemHead { padding: 10px; background: aqua; cursor: pointer; }
+		.accordionItemBody { padding: 10px; background: coral; display: none; }
+		.accordionItemBody.isActive { display: block; }
+
+		.toggleHead { padding: 10px; margin: 10px 40px; background: aqua; cursor: pointer; }
+		.toggleBody { padding: 10px; margin: 10px 40px; background: coral; display: none; }
+		.toggleBody.isActive { display: block; }
+
+		.navLangBody { display: none; }
+		.navLangBody.isActive { display: block; }
+	</style>
+	
+	<script src="jquery-3.1.1.js"></script>
+	<script src="dailyFunctions.js"></script>
+	<script>
+		$(document).ready(function() {
+			Global.makeActiveInit();
+		});
+	</script>
+</head>
+<body>
+<div class="container" id="jsContainer">
+	<h1>Daily functions demo page.</h1>
+
+	<h3>Example: Accordion - With Scope</h3>
+
+	<div class="accordion">
+		<div class="accordionItem">
+			<div class="accordionItemHead" data-active-target=".accordionItemBody" data-active-scope=".accordionItem">
+				<p>Accordion Title</p>
+			</div>
+
+			<div class="accordionItemBody">
+				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Neque fugit, ducimus, a atque perspiciatis voluptatum labore possimus, assumenda alias recusandae fugiat harum nesciunt similique optio inventore modi obcaecati tenetur incidunt.</p>
+			</div>
+		</div>
+
+		<div class="accordionItem">
+			<div class="accordionItemHead" data-active-target=".accordionItemBody" data-active-scope=".accordionItem">
+				<p>Accordion Title</p>
+			</div>
+
+			<div class="accordionItemBody">
+				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Neque fugit, ducimus, a atque perspiciatis voluptatum labore possimus, assumenda alias recusandae fugiat harum nesciunt similique optio inventore modi obcaecati tenetur incidunt.</p>
+			</div>
+		</div>
+
+		<div class="accordionItem">
+			<div class="accordionItemHead" data-active-target=".accordionItemBody" data-active-scope=".accordionItem">
+				<p>Accordion Title</p>
+			</div>
+
+			<div class="accordionItemBody">
+				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Neque fugit, ducimus, a atque perspiciatis voluptatum labore possimus, assumenda alias recusandae fugiat harum nesciunt similique optio inventore modi obcaecati tenetur incidunt.</p>
+			</div>
+		</div>
+
+		<div class="accordionItem">
+			<div class="accordionItemHead" data-active-target=".accordionItemBody" data-active-scope=".accordionItem">
+				<p>Accordion Title</p>
+			</div>
+
+			<div class="accordionItemBody">
+				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Neque fugit, ducimus, a atque perspiciatis voluptatum labore possimus, assumenda alias recusandae fugiat harum nesciunt similique optio inventore modi obcaecati tenetur incidunt.</p>
+			</div>
+		</div>
+	</div><!-- /.accordion -->
+
+	<h3>Example: Simple Toggle - No Scope</h3>
+
+	<div class="toggleHead" data-active-target="#toggleBody1">Toggle Title</div>
+	<div class="toggleBody" id="toggleBody1">
+		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Beatae labore nihil distinctio aperiam earum sapiente, nesciunt temporibus rem consequatur eius maiores quaerat deleniti alias obcaecati voluptates, suscipit at doloremque architecto!</p>
+	</div>
+
+	<div class="toggleHead" data-active-target="#toggleBody2">Toggle Title</div>
+	<div class="toggleBody" id="toggleBody2">
+		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Beatae labore nihil distinctio aperiam earum sapiente, nesciunt temporibus rem consequatur eius maiores quaerat deleniti alias obcaecati voluptates, suscipit at doloremque architecto!</p>
+	</div>
+</div><!-- /.container -->
+</body>
+</html>

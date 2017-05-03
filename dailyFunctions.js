@@ -30,6 +30,67 @@
 		return debounced;
 	};
 
+	Global.makeActiveInit = function() {
+		var $triggers = $('[data-active-target]');
+
+		// stop execution when elements does missing 
+		if (!$triggers.length) {
+			return;
+		}
+
+		$triggers.on('click', function() {
+			var $currentElement = $(this);
+			var $currentScope;
+			var $currentTarget;
+			
+			if (typeof $currentElement.data('active-scope') === 'undefined') {
+				$currentTarget = $($currentElement.data('active-target'));
+				
+				// handle missing target
+				if (!$currentTarget.length) {
+					console.error('makeActiveInit: Missing target element!');
+					return;
+				}
+
+				// handle multiple targets
+				if ($currentTarget.length > 1) {
+					console.error('makeActiveInit: Detect multiple target elements. Require "data-active-scope"!');
+					return;
+				}
+			} else {
+				$currentScope = $currentElement.closest($currentElement.data('active-scope'));
+				$currentTarget = $currentScope.find($currentElement.data('active-target'));
+
+				// handle missing scope
+				if (!$currentScope.length) {
+					console.error('makeActiveInit: Missing scope element! Remove "data-active-scope" attribute or add scope element!');
+					return;
+				};
+			}
+			
+			// switch classes
+			if ($currentElement.hasClass('isActive')) {
+				$currentElement.removeClass('isActive');	
+				$currentTarget.removeClass('isActive');
+
+				if (typeof $currentElement.data('active-scope') !== 'undefined') {
+					if ($currentScope.length) {
+						$currentScope.removeClass('isActive');
+					}
+				}
+			} else {
+				$currentElement.addClass('isActive');	
+				$currentTarget.addClass('isActive');
+
+				if (typeof $currentElement.data('active-scope') !== 'undefined') {
+					if ($currentScope.length) {
+						$currentScope.addClass('isActive');
+					}
+				}
+			}
+		});
+	};
+
 	/**
 	 * Basic toggle function.
 	 * 
