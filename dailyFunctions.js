@@ -118,7 +118,7 @@
 
 		// stop execution when parameters are not valid
 		if (!$container.length || !$trigger.length) {
-			console.log('basicInteractionInit: Invalid parameters!');
+			console.error('basicInteractionInit: Invalid parameters!');
 			return;
 		}
 
@@ -151,7 +151,7 @@
 	Global.basicInteractionHide = function(event, selectorsString) {
 		// stop execution when parameters are not valid
 		if (typeof event === 'undefined' || !$(selectorsString).length) {
-			console.log('basicInteractionHide: Invalid parameters!');
+			console.error('basicInteractionHide: Invalid parameters!');
 			return;
 		}
 
@@ -197,13 +197,14 @@
 			
 			// stop execution when target does not exists
 			if (!$target.length) {
-				console.log('scrollToSelectorInit: Scroll target does not exist!');
+				console.error('scrollToSelectorInit: Scroll target does not exist!');
+				console.warn('Function gets CSS style selector');
 				return;
 			}
 			
 			// stop execution when multiple targets are present
 			if ($target.length > 1) {
-				console.log('scrollToSelectorInit: Multiple scroll targets detected!');
+				console.error('scrollToSelectorInit: Multiple scroll targets detected!');
 				return;
 			}
 
@@ -377,25 +378,61 @@
 	/**
 	 * Field's labels moving effect.
 	 *
+	 * Required:
+	 * - 'data-blink-scope' - Get CSS style selector.
+	 * 
 	 * @private
 	 * @return {void}
 	 */
 	var blinkFieldsInit = function() {
-		var $inputs = $('.field').find('input, textarea');
+		var $inputs = $('[data-blink-scope]');
+		var $currentElement;
+		var scopeSelector;
+
+		// stop execution when elements does missing 
+		if (!$inputs.length) {
+			return;
+		}
+
+		function checkSelector(selector) {
+			if (!$(selector).length) {
+				console.error('blinkFieldsInit: Invalid scope selector! - "' + selector + '"');
+				console.warn('Function gets CSS style selector');
+				return;
+			}
+		}
 
 		$inputs.each(function() {
-			if($(this).val()) {
-				$(this).closest('.field').addClass('isActive');
+			$currentElement = $(this);
+
+			if ($currentElement.data('blink-scope')) {
+				scopeSelector = $currentElement.data('blink-scope');
+			}
+
+			checkSelector(scopeSelector);
+		
+			if($currentElement.val()) {
+				$currentElement.closest(scopeSelector).addClass('isActive');
 			} else {
-				$(this).closest('.field').removeClass('isActive');
+				$currentElement.closest(scopeSelector).removeClass('isActive');
 			}
 		});
 
 		$inputs.on('focusin', function() {
-			$(this).closest('.field').addClass('isActive');
+			$currentElement = $(this);
+			scopeSelector = $currentElement.data('blink-scope');
+
+			checkSelector(scopeSelector);
+
+			$currentElement.closest(scopeSelector).addClass('isActive');
 		}).on('focusout', function() {
-			if(!$(this).val()) {
-				$(this).closest('.field').removeClass('isActive');
+			$currentElement = $(this);
+			scopeSelector = $currentElement.data('blink-scope');
+
+			checkSelector(scopeSelector);
+
+			if(!$currentElement.val()) {
+				$currentElement.closest(scopeSelector).removeClass('isActive');
 			}
 		});
 	};
@@ -519,7 +556,13 @@
 
 	$doc.on('touchstart', function(event) {});
 
-	$doc.ready(function() {});
+	$doc.ready(function() {
+		// blinkFieldsInit();
+	});
+
+	$win.on('load', function() {
+		blinkFieldsInit();
+	});
 
 	$win.on('resize', function() {
 		// Global.debounce(myFunctionName)();
