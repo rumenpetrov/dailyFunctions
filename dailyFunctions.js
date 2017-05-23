@@ -31,9 +31,13 @@
 	};
 
 	/**
-	 * Connects two elements.
+	 * Connects elements.
 	 *
-	 * Require 'data-active-target' attribute to link to elements and 'data-active-scope' attribute to work with multiple triggers.
+	 * Required:
+	 * - 'data-active-target' - Get CSS style selector. Set the attribute to a target element.
+	 *
+	 * Optional:
+	 * - 'data-active-scope' - Get CSS style selector. Use it to work with multiple targets. 
 	 * 
 	 * @public
 	 * @return {void}
@@ -51,7 +55,7 @@
 			var $currentScope;
 			var $currentTarget;
 			
-			if (typeof $currentElement.data('active-scope') === 'undefined') {
+			if (!$currentElement.data('active-scope')) {
 				$currentTarget = $($currentElement.data('active-target'));
 				
 				// handle missing target
@@ -81,7 +85,7 @@
 				$currentElement.removeClass('isActive');	
 				$currentTarget.removeClass('isActive');
 
-				if (typeof $currentElement.data('active-scope') !== 'undefined') {
+				if ($currentElement.data('active-scope')) {
 					if ($currentScope.length) {
 						$currentScope.removeClass('isActive');
 					}
@@ -90,7 +94,7 @@
 				$currentElement.addClass('isActive');	
 				$currentTarget.addClass('isActive');
 
-				if (typeof $currentElement.data('active-scope') !== 'undefined') {
+				if ($currentElement.data('active-scope')) {
 					if ($currentScope.length) {
 						$currentScope.addClass('isActive');
 					}
@@ -160,33 +164,46 @@
 	};
 
 	/**
-	 * Scroll the window to selector from trigger's data-target attribute.
+	 * Scroll the window to element.
+	 *
+	 * Required:
+	 * - 'data-scrollto' - Get only CSS style ID selector.
+	 *
+	 * Optional:
+	 * -'data-scrollto-offset' - Get CSS style selector.
 	 *
 	 * @public
-	 * @param  {string|Object}
-	 * @param  {int} Default value 0.
 	 * @return {void}
 	 */
-	Global.scrollToSelectorInit = function(trigger, offsetTop) {
-		var $trigger = $(trigger);
+	Global.scrollToSelectorInit = function() {
+		var $triggers = $('[data-scrollto]');
+		var offsetTop = 0;
 
 		// stop execution when element does not exist
-		if (!$trigger.length) {
-			console.log('Scroll trigger does not exist!');
+		if (!$triggers.length) {
 			return;
 		}
 
-		// set default values
-		offsetTop = (typeof offsetTop === 'undefined') ? 0 : offsetTop;
-
-		$trigger.on('click', function(event) {
+		$triggers.on('click', function(event) {
 			event.preventDefault();
 
-			var $target = $($(this).data('target'));
+			var $currentElement = $(this);
+			var targetSelector = $(this).data('scrollto');
+			var $target = $(targetSelector);
 
+			if (parseInt($currentElement.data('scrollto-offset'))) {
+				offsetTop = parseInt($currentElement.data('scrollto-offset'));
+			}
+			
 			// stop execution when target does not exists
 			if (!$target.length) {
-				console.log('Scroll target does not exist!');
+				console.log('scrollToSelectorInit: Scroll target does not exist!');
+				return;
+			}
+			
+			// stop execution when multiple targets are present
+			if ($target.length > 1) {
+				console.log('scrollToSelectorInit: Multiple scroll targets detected!');
 				return;
 			}
 
