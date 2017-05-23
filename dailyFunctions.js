@@ -30,6 +30,14 @@
 		return debounced;
 	};
 
+	/**
+	 * Connects two elements.
+	 *
+	 * Require 'data-active-target' attribute to link to elements and 'data-active-scope' attribute to work with multiple triggers.
+	 * 
+	 * @public
+	 * @return {void}
+	 */
 	Global.makeActiveInit = function() {
 		var $triggers = $('[data-active-target]');
 
