@@ -104,42 +104,7 @@
 	};
 
 	/**
-	 * Basic toggle function.
-	 * 
-	 * @public
-	 * @param  {string|object}
-	 * @param  {string|object}
-	 * @param  {bool}
-	 * @return {void}
-	 */
-	Global.basicInteractionInit = function(container, trigger, prevent) {
-		var $container = $(container);
-		var $trigger = $(trigger);
-
-		// stop execution when parameters are not valid
-		if (!$container.length || !$trigger.length) {
-			console.error('basicInteractionInit: Invalid parameters!');
-			return;
-		}
-
-		// set default values
-		prevent = (typeof prevent === 'undefined') ? true : prevent;
-
-		$trigger.on('click', function(event) {
-			if (prevent) event.preventDefault();
-
-			if ($trigger.hasClass('isActive')) {
-				$trigger.removeClass('isActive');
-				$container.removeClass('isActive');
-			} else {
-				$trigger.addClass('isActive');
-				$container.addClass('isActive');
-			}
-		});
-	};
-
-	/**
-	 * Basic hide function.
+	 * Hide function.
 	 *
 	 * Check if event's target matches given selectors or esc key is pressed.
 	 * 
@@ -148,10 +113,10 @@
 	 * @param  {string|Object}
 	 * @return {void}
 	 */
-	Global.basicInteractionHide = function(event, selectorsString) {
+	Global.practicalHide = function(event, selectorsString) {
 		// stop execution when parameters are not valid
 		if (typeof event === 'undefined' || !$(selectorsString).length) {
-			console.error('basicInteractionHide: Invalid parameters!');
+			console.error('practicalHide: Invalid parameters!');
 			return;
 		}
 
@@ -262,6 +227,7 @@
 	 * 
 	 * @TO DO: Handle first tab select for multiple instances.
 	 * @TO DO: Animate active tab.
+	 * @TO DO: Transform function to use data attributes.
 	 */
 	Global.tabsInit = function(container) {
 		var $container = $(container);
@@ -314,66 +280,6 @@
 			}
 		});
 	};
-
-	/**
-	 * Simple Accordion.
-	 *
-	 * @private
-	 * @param  {string|Object}
-	 * @param  {string|Object}
-	 * @param  {string|Object}
-	 * @return {void}
-	 */
-	var basicAccordionInit = function(container, items, trigger) {
-		var $container = $(container);
-		var $trigger = $(trigger);
-		var $items = $(items);
-		var $current;
-
-		$trigger.on('click', function(event) {
-			event.preventDefault();
-			event.stopPropagation();
-			
-			$current = $(this).parents().first();
-
-			if (!($current.hasClass('isActive'))) {
-				$items.removeClass('isActive');
-				$current.addClass('isActive');
-			} else {
-				$items.removeClass('isActive');
-			}
-		});
-	};
-
-	/**
-	 * Simple tabs.
-	 *
-	 * @private
-	 * @param  {string|Object}
-	 * @param  {string|Object}
-	 * @return {[type]}
-	 */
-	var basicTabsInit = function(tabsNav, tabs) {
-		var $tabsNav = $(tabsNav);
-		var $tabs = $(tabs);
-
-		$tabs.not(':first-child').hide();
-		$tabsNav.find('li:first-child').addClass('selected');
-		
-		$tabsNav.on('click', 'a', function(event) {
-			var $this = $(this),
-				$parent = $this.parent(),
-				href = $this.attr('href');
-
-			if (!$parent.hasClass('selected')) {
-				$parent.addClass('selected');
-				$parent.siblings().removeClass('selected');
-				$tabs.filter(href).fadeIn(300).siblings().hide();
-				// $tabs.filter(href).show().siblings().hide();
-			}
-			event.preventDefault();
-		});
-	}
 
 	/**
 	 * Field's labels moving effect.
@@ -444,6 +350,8 @@
 	 * @param  {string|Object}
 	 * @param  {bool} Default value true.
 	 * @return {void}
+	 *
+	 * @TO DO: Transform function to use data attributes.
 	 */
 	var checkPosition = function(elements, removeClass) {
 		// set default values
@@ -473,47 +381,11 @@
 	};
 
 	/**
-	 * Calculates viewport's min height.
-	 *
-	 * @private
-	 * @return {void}
-	 */
-	var calcViewport = function() {
-		var $wrap = $('#jsContainer');
-		var $shell = $wrap.find('#jsShell');
-		var shellH = 0;
-
-		// exclude elements height, border, padding and margin
-		function calcShellExcludes() {
-			var $elements = $('.jsShellExclude');
-			var total = 0;
-
-			$elements.each(function() {
-				if ($(this).is(":visible")) {
-					total += $(this).outerHeight(true);
-				}
-			});
-
-			return total;
-		}
-
-		shellH = $win.height() - calcShellExcludes() - parseInt($shell.css('padding-top')) - parseInt($shell.css('padding-bottom'));
-
-		$wrap.css({
-			'min-height': $win.height()
-		});
-
-		if (shellH > 0) {
-			$shell.css({
-				'min-height': shellH
-			});
-		}
-	};
-
-	/**
 	 * Change image background on hover.
 	 * 
 	 * @return {void}
+	 *
+	 * @TO DO: Transform function to use data attributes.
 	 */
 	Global.imageChangerInit = function() {
 		var $target = $('#jsImageChangerTarget');
@@ -552,16 +424,18 @@
 
 	$doc.on('keyup', function(event) {});
 
-	$doc.on('click', function(event) {});
+	$doc.on('click', function(event) {
+		Global.practicalHide(event, '.toggleHead, .toggleBody');
+	});
 
 	$doc.on('touchstart', function(event) {});
 
 	$doc.ready(function() {
-		// blinkFieldsInit();
+		blinkFieldsInit();
 	});
 
 	$win.on('load', function() {
-		blinkFieldsInit();
+
 	});
 
 	$win.on('resize', function() {
