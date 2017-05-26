@@ -113,17 +113,16 @@
 	 * @param  {string|Object}
 	 * @return {void}
 	 */
-	Global.practicalHide = function(event, selectorsString) {
+	Global.practicalHide = function(evt, selectorsString) {
 		// stop execution when parameters are not valid
-		if (typeof event === 'undefined' || !$(selectorsString).length) {
+		if (typeof evt === 'undefined' || !$(selectorsString).length) {
 			console.error('practicalHide: Invalid parameters!');
 			return;
 		}
 
-		var evt = event || window.event;
 		var $target = $(evt.target);
 
-		if ((!$target.closest(selectorsString).length) || (event.keyCode == 27 /* esc key*/)) {
+		if ((!$target.closest(selectorsString).length) || (evt.keyCode == 27 /* esc key*/)) {
 			$(selectorsString).removeClass('isActive');
 		}
 	};
@@ -149,8 +148,8 @@
 			return;
 		}
 
-		$triggers.on('click', function(event) {
-			event.preventDefault();
+		$triggers.on('click', function(evt) {
+			evt.preventDefault();
 
 			var $currentElement = $(this);
 			var targetSelector = $(this).data('scrollto');
@@ -187,6 +186,8 @@
 	 * @param  {string|Object}
 	 * @param  {string|Object}
 	 * @return {void}
+	 *
+	 * @TO DO: Transform function to use data attributes.
 	 */
 	Global.sticky = function(element, pivotTop, pivotBottom) {
 		var $element = $(element);
@@ -269,8 +270,8 @@
 		updateContents($($tabsTriggers[0]).attr('href'));
 		
 		// switch between tabs
-		$tabsTriggers.on('click', function(event) {
-			event.preventDefault();
+		$tabsTriggers.on('click', function(evt) {
+			evt.preventDefault();
 
 			var	href = $(this).attr('href');
 
@@ -422,13 +423,17 @@
 		#EVENT BINDS
 	\* ------------------------------------------------------------ */
 
-	$doc.on('keyup', function(event) {});
+	$doc.on('keyup', function(event) {
+		Global.practicalHide(event, '.toggleHead, .toggleBody');
+	});
 
 	$doc.on('click', function(event) {
 		Global.practicalHide(event, '.toggleHead, .toggleBody');
 	});
 
-	$doc.on('touchstart', function(event) {});
+	$doc.on('touchstart', function(event) {
+		Global.practicalHide(event, '.toggleHead, .toggleBody');
+	});
 
 	$doc.ready(function() {
 		blinkFieldsInit();
