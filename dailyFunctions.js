@@ -113,18 +113,57 @@
 	 * @param  {string|Object}
 	 * @return {void}
 	 */
-	Global.practicalHide = function(evt, selectorsString) {
+	Global.basicHide = function(evt, selector) {
 		// stop execution when parameters are not valid
-		if (typeof evt === 'undefined' || !$(selectorsString).length) {
-			console.error('practicalHide: Invalid parameters!');
+		if (typeof evt === 'undefined' || !$(selector).length) {
+			console.error('basicHide: Invalid parameters!');
 			return;
 		}
 
 		var $target = $(evt.target);
 
-		if ((!$target.closest(selectorsString).length) || (evt.keyCode == 27 /* esc key*/)) {
-			$(selectorsString).removeClass('isActive');
+		if ((!$target.closest(selector).length) || (evt.keyCode == 27 /* esc key*/)) {
+			$(selector).removeClass('isActive');
 		}
+	};
+
+	/**
+	 * Hide function.
+	 *
+	 * Check if event's target matches given selectors or esc key is pressed.
+	 * 
+	 * @public
+	 * @param  {event}
+	 * @param  {string|Object|Array} Requre only ID's
+	 * @return {void}
+	 */
+	Global.practicalHide = function(evt, selector) {
+		var $elements = $(selector);
+
+		// stop execution when parameters are not valid
+		if (typeof evt === 'undefined' || !$elements.length) {
+			console.log('basicInteractionHide: Invalid parameters!');
+			return;
+		}
+
+		var $target = $(evt.target);
+		var evtType = evt.type;
+
+		$elements.each(function(index, el) {
+			var $element = $(el);
+
+			if (evtType === 'keyup' && evt.keyCode === 27 /* esc key*/) {
+				$element.removeClass('isActive');
+			}
+
+			if (evtType === 'click' || evtType === 'touchstart') {
+				if (!$target.closest($element).length) {
+					if ($element.hasClass('isActive')) {
+						$element.removeClass('isActive');
+					}
+				}
+			}
+		});
 	};
 
 	/**
@@ -424,15 +463,18 @@
 	\* ------------------------------------------------------------ */
 
 	$doc.on('keyup', function(event) {
-		Global.practicalHide(event, '.toggleHead, .toggleBody');
+		// Global.practicalHide(event, ['.toggleHead', '.toggleBody']);
+		Global.basicHide(event, '.toggleHead, .toggleBody');
 	});
 
 	$doc.on('click', function(event) {
-		Global.practicalHide(event, '.toggleHead, .toggleBody');
+		// Global.practicalHide(event, ['.toggleHead', '.toggleBody']);
+		Global.basicHide(event, '.toggleHead, .toggleBody');
 	});
 
 	$doc.on('touchstart', function(event) {
-		Global.practicalHide(event, '.toggleHead, .toggleBody');
+		// Global.practicalHide(event, ['.toggleHead', '.toggleBody']);
+		Global.basicHide(event, '.toggleHead, .toggleBody');
 	});
 
 	$doc.ready(function() {
