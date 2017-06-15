@@ -50,7 +50,7 @@
 		$(document).ready(function() {
 			Global.makeActiveInit();
 			Global.scrollToSelectorInit();
-			Global.tabsInit('#jsTabsMain');
+			Global.tabsInit();
 		});
 	</script>
 </head>
@@ -106,8 +106,13 @@
 			
 			<h3>Example: Simple Toggle - No Scope</h3>
 			
-			<div class="toggleHead" data-active-target="#toggleBody1">Toggle Title</div>
+			<div class="toggleHead" id="toggleHead1" data-active-target="#toggleBody1">Toggle Title</div>
 			<div class="toggleBody" id="toggleBody1">
+				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Beatae labore nihil distinctio aperiam earum sapiente, nesciunt temporibus rem consequatur eius maiores quaerat deleniti alias obcaecati voluptates, suscipit at doloremque architecto!</p>
+			</div>
+
+			<div class="toggleHead" id="toggleHead2" data-active-target="#toggleBody2">Toggle Title</div>
+			<div class="toggleBody" id="toggleBody2">
 				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Beatae labore nihil distinctio aperiam earum sapiente, nesciunt temporibus rem consequatur eius maiores quaerat deleniti alias obcaecati voluptates, suscipit at doloremque architecto!</p>
 			</div>
 		</section>
@@ -125,18 +130,18 @@
 		<section class="section">
 			<h3>Example: Tabs - Accordion Demo</h3>
 			
-			<div class="block blockTabs" id="jsTabsMain">
+			<div class="block blockTabs">
 				<nav class="tabsNav">
 					<ul>
-						<li><a href="#tab1" class="jsTabsTrigger">Описание и характеристики</a></li>
-						<li><a href="#tab2" class="jsTabsTrigger">Наличност по магазини</a></li>
-						<li><a href="#tab3" class="jsTabsTrigger">новини за продукта</a></li>
+						<li><a href="#" data-tabs-trigger="randomString1">Описание и характеристики</a></li>
+						<li><a href="#" data-tabs-trigger="randomString2">Наличност по магазини</a></li>
+						<li><a href="#" data-tabs-trigger="randomString3">новини за продукта</a></li>
 					</ul>
 				</nav>
 				
 				<div class="tabsContent">
-					<div class="tab jsTab" id="tab1">
-						<a href="#tab1" class="tabHead jsTabsTrigger">Описание и характеристики</a>
+					<div class="tab" data-tabs-content="randomString1">
+						<a href="#" class="tabHead" data-tabs-trigger="randomString1">Описание и характеристики</a>
 				
 						<div class="tabBody">
 							<article class="article">
@@ -145,8 +150,8 @@
 						</div>
 					</div><!-- /.tab -->
 					
-					<div class="tab jsTab" id="tab2">
-						<a href="#tab2" class="tabHead jsTabsTrigger">Наличност по магазини</a>
+					<div class="tab" data-tabs-content="randomString2">
+						<a href="#" class="tabHead" data-tabs-trigger="randomString2">Наличност по магазини</a>
 				
 						<div class="tabBody">
 							<article class="article">
@@ -155,8 +160,8 @@
 						</div>
 					</div><!-- /.tab -->
 					
-					<div class="tab jsTab" id="tab3">
-						<a href="#tab3" class="tabHead jsTabsTrigger">Коментари и рейтинг</a>
+					<div class="tab" data-tabs-content="randomString3">
+						<a href="#" class="tabHead" data-tabs-trigger="randomString3">Коментари и рейтинг</a>
 				
 						<div class="tabBody">
 							<article class="article">

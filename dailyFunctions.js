@@ -130,7 +130,7 @@
 	/**
 	 * Hide function.
 	 *
-	 * Check if event's target matches given selectors or esc key is pressed.
+	 * Check if event's target matches given selectors or esc key is pressed. Work only within scope.
 	 * 
 	 * @public
 	 * @param  {event}
@@ -157,6 +157,8 @@
 			}
 
 			if (evtType === 'click' || evtType === 'touchstart') {
+				console.log($target, $element, !$target.closest($element).length);
+
 				if (!$target.closest($element).length) {
 					if ($element.hasClass('isActive')) {
 						$element.removeClass('isActive');
@@ -259,64 +261,83 @@
 	};
 
 	/**
-	 * Tabs function.
+	 * Tabs/Accordion.
+	 * 
+	 * Required:
+	 * - 'data-tabs-trigger' - Need unique, random string to connect to contents
+	 * - 'data-tabs-content' - Need unique, random string to connect to triggers
 	 * 
 	 * @public
-	 * @param  {string|Object}.
 	 * @return {void}
 	 * 
-	 * @TO DO: Handle first tab select for multiple instances.
+	 * @TO DO: Add scope to handle multiple instances.
 	 * @TO DO: Animate active tab.
-	 * @TO DO: Transform function to use data attributes.
 	 */
-	Global.tabsInit = function(container) {
-		var $container = $(container);
-		var $tabsTriggers = $container.find('.jsTabsTrigger');
-		var $tabsContents = $container.find('.jsTab');
+	Global.tabsInit = function() {
+		// var $container = $(container);
+		var $tabsTriggers = $('[data-tabs-trigger]');
+		var $tabsContents = $('[data-tabs-content]');
 
 		// stop execution when parameters are not valid
-		if (!$container.length || !$tabsTriggers.length || !$tabsContents.length) {
+		if (!$tabsTriggers.length || !$tabsContents.length) {
 			console.log('basicTabsInit: Invalid parameters!');
 			return;
 		}
 
 		// handle active trigger
-		function updateTriggers(targetID) {
-			$tabsTriggers.removeClass('isActive');
-			$tabsTriggers.each(function() {
-				var	$that = $(this);
+		// function updateTriggers(id) {
+		// 	$tabsTriggers.removeClass('isActive');
+		// 	$tabsTriggers.each(function() {
+		// 		var	$that = $(this);
 
-				if ($that.attr('href') === targetID) {
-					$that.addClass('isActive');
-				}
-			});
-		}
+		// 		if ($that.data('tabs-trigger') === id) {
+		// 			$that.addClass('isActive');
+		// 		}
+		// 	});
+		// }
 
 		// handle active tab
-		function updateContents(targetID) {
-			$tabsContents.removeClass('isActive');
-			$tabsContents.each(function() {
-				var	$that = $(this);
+		// function updateContents(id) {
+		// 	$tabsContents.removeClass('isActive');
+		// 	$tabsContents.each(function() {
+		// 		var	$that = $(this);
 
-				if ($that.attr('id') === targetID.split('#')[1]) {
-					$that.addClass('isActive');
-				}
-			});
-		}
+		// 		if ($that.data('tabs-content') === id) {
+		// 			$that.addClass('isActive');
+		// 		}
+		// 	});
+		// }
 
 		// select first tab
-		updateTriggers($($tabsTriggers[0]).attr('href'));
-		updateContents($($tabsTriggers[0]).attr('href'));
+		// updateTriggers($($tabsTriggers[0]).data('tabs-trigger'));
+		// updateContents($($tabsContents[0]).data('tabs-content'));
 		
 		// switch between tabs
 		$tabsTriggers.on('click', function(evt) {
 			evt.preventDefault();
 
-			var	href = $(this).attr('href');
+			var	id = $(this).data('tabs-trigger');
 
 			if (!$(this).hasClass('isActive')) {
-				updateTriggers(href);
-				updateContents(href);
+				// updateTriggers(id);
+				// updateContents(id);
+				
+				$tabsTriggers.removeClass('isActive');
+				$tabsContents.removeClass('isActive');
+				$tabsTriggers.each(function() {
+					var	$that = $(this);
+
+					if ($that.data('tabs-trigger') === id) {
+						$that.addClass('isActive');
+					}
+				});
+				$tabsContents.each(function() {
+					var	$that = $(this);
+
+					if ($that.data('tabs-content') === id) {
+						$that.addClass('isActive');
+					}
+				});
 			}
 		});
 	};
@@ -463,18 +484,21 @@
 	\* ------------------------------------------------------------ */
 
 	$doc.on('keyup', function(event) {
-		// Global.practicalHide(event, ['.toggleHead', '.toggleBody']);
+		// Global.practicalHide(event, ['#toggleHead1']);
 		Global.basicHide(event, '.toggleHead, .toggleBody');
+		Global.basicHide(event, '.accordionItemHead, .accordionItemBody, .accordionItem');
 	});
 
 	$doc.on('click', function(event) {
-		// Global.practicalHide(event, ['.toggleHead', '.toggleBody']);
+		// Global.practicalHide(event, ['#toggleHead1']);
 		Global.basicHide(event, '.toggleHead, .toggleBody');
+		Global.basicHide(event, '.accordionItemHead, .accordionItemBody, .accordionItem');
 	});
 
 	$doc.on('touchstart', function(event) {
-		// Global.practicalHide(event, ['.toggleHead', '.toggleBody']);
+		// Global.practicalHide(event, ['#toggleHead1']);
 		Global.basicHide(event, '.toggleHead, .toggleBody');
+		Global.basicHide(event, '.accordionItemHead, .accordionItemBody, .accordionItem');
 	});
 
 	$doc.ready(function() {
