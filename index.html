@@ -8,40 +8,74 @@
 	<!-- <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"> -->
 
 	<style>
+		/* STYLES BELOW ARE ONLY FOR DEMO PURPOSE */
+
 		* { padding: 0; margin: 0; outline: 0; }
 
+		html { font-size: 10px; }
+		body { background: #FFD166; font-family: sans-serif; font-size: 1.6em; line-height: 1.3; color: #fff; }
+		
 		h1,
 		h2,
-		h3,
 		h4,
 		h5,
-		h6 { padding-bottom: 20px; }
+		h6 { margin-bottom: 2rem; }
 
-		h1 { text-align: center; }
+		h1 { font-size: 3rem; text-align: center; }
+		h2 { font-size: 2.5rem; }
+		h3 { border-bottom: 1px solid #fff; font-size: 2.2rem; text-align: right; }
+		h4 { margin-top: 2rem; font-size: 1.8rem; text-align: center; }
+		h5 { font-size: 1.6rem; }
+		h6 { font-size: 1.2rem; }
 
-		.container { padding: 40px 0; }
-		.wrapper { width: 1200px; margin: 0 auto; }
+		.note { margin-bottom: 20px; font-style: italic; text-align: center; }
 
-		.section { padding: 40px; background: #f9f9f9; }
-		.section:nth-child(2n) { background: #eee; }
+		.header { padding: 3rem 0px; background: #EF476F; }
+		.header h1 { margin-bottom: 0; }
 
+		.section { padding: 5rem; background: #06D6A0; }
+		.section:nth-child(2n) { background: #118AB2; }
+
+		.btn { display: inline-block; vertical-align: top; border: 0; background-color: transparent; text-decoration: none; }
+		.btnPrimary { min-width: 100px; height: 40px; padding: 0 10px; background: #EF476F; font-size: 1.2em; line-height: 40px; color: #fff; }
+
+		.accordion { padding: 20px 0; }
 		.accordionItem { margin-bottom: 10px; }
-		.accordionItemHead { padding: 10px; background: aqua; cursor: pointer; }
-		.accordionItemBody { padding: 10px; background: coral; display: none; }
+		.accordionItemHead { padding: 10px; background: #073B4C; cursor: pointer; }
+		.accordionItemHead.isActive { background: #EF476F; }
+		.accordionItemBody { padding: 10px; background: #06D6A0; display: none; }
 		.accordionItemBody.isActive { display: block; }
 
-		.toggleHead { padding: 10px; margin-bottom: 10px; background: aqua; cursor: pointer; }
-		.toggleBody { padding: 10px; margin-bottom: 10px; background: coral; display: none; }
+		.toggles { padding: 20px 0; }
+		.toggleHead { padding: 10px; margin-bottom: 10px; background: #073B4C; cursor: pointer; }
+		.toggleHead.isActive { background: #EF476F; }
+		.toggleBody { padding: 10px; margin-bottom: 10px; background: #06D6A0; display: none; }
 		.toggleBody.isActive { display: block; }
 
-		.blockTabs { padding: 40px 0; }
-		/*.blockTabs .tabHead { display: none; }*/
-		.blockTabs .tabBody { display: none; }
-		.blockTabs .tab.isActive .tabBody { display: block; }
+		#scrollToHere { margin: 20px 0; text-align: center; font-weight: bold; }
 
-		.formControls { position: relative; margin-top: 30px; }
-		.formControls .formLabel { position: absolute; top: 50%; left: 0; transform: translateY(-50%); }
-		.formControls.isActive .formLabel { transform: translateY(-150%); }
+		.blockTabs { padding: 40px 0; }
+		.blockTabs .tabHead { display: none; }
+		@media (max-width: 1200px) {
+			.tabsNav { display: none; }
+			.blockTabs .tabHead { display: block; }
+		}
+		.blockTabs .tabBody { display: none; padding: 10px; background: #06D6A0; display: none; }
+		.blockTabs .tab { margin-bottom: 10px; }
+		.blockTabs .tab.isActive .tabBody { display: block; }
+		.tabsNav ul { list-style: none; }
+		.tabsNav a,
+		.tabHead { display: block; padding: 10px; margin-bottom: 10px; background: #073B4C; cursor: pointer; color: #fff; text-decoration: none; }
+		.tabsNav a.isActive,
+		.tabHead.isActive { background: #EF476F; }
+		.tabsNav li { display: inline-block; vertical-align: top; }
+
+		.form { max-width: 500px; margin: 20px auto; }
+		.form .field input { box-sizing: border-box; max-width: 100%; width: 100%; height: 40px; border: 1px solid transparent; padding: 10px 20px; background: #fff; font-size: 16px; line-height: 20px; }
+		.form .formControls { position: relative; margin-top: 30px; }
+		.form .formControls .formLabel { position: absolute; top: 50%; left: 20px; display: inline-block; vertical-align: top; padding: 2px 10px; background: #fff; border-radius: 5px; font-size: 16px; line-height: 20px; color: #000; transform: translateY(-50%); transition: all 0.3s; }
+		.form .formControls.isActive .formLabel { font-size: 12px; transform: translateY(-150%); }
+		.form .btns { text-align: center; }
 	</style>
 	
 	<script src="jquery-3.1.1.js"></script>
@@ -56,199 +90,223 @@
 </head>
 <body>
 <div class="container" id="jsContainer">
-	<div class="wrapper">
-		<h1>Daily functions demo page.</h1>
+	<header class="header">
+		<h1>Daily functions examples.</h1>
+	</header>
+	
+	<section class="section">
+		<h3>Function: makeActiveInit</h3>
 		
-		<section class="section">
-			<h3>Example: Accordion - With Scope</h3>
-			
-			<div class="accordion">
-				<div class="accordionItem">
-					<div class="accordionItemHead" data-active-target=".accordionItemBody" data-active-scope=".accordionItem">
-						<p>Accordion Title</p>
-					</div>
-			
-					<div class="accordionItemBody">
-						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Neque fugit, ducimus, a atque perspiciatis voluptatum labore possimus, assumenda alias recusandae fugiat harum nesciunt similique optio inventore modi obcaecati tenetur incidunt.</p>
-					</div>
-				</div>
-			
-				<div class="accordionItem">
-					<div class="accordionItemHead" data-active-target=".accordionItemBody" data-active-scope=".accordionItem">
-						<p>Accordion Title</p>
-					</div>
-			
-					<div class="accordionItemBody">
-						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Neque fugit, ducimus, a atque perspiciatis voluptatum labore possimus, assumenda alias recusandae fugiat harum nesciunt similique optio inventore modi obcaecati tenetur incidunt.</p>
-					</div>
-				</div>
-			
-				<div class="accordionItem">
-					<div class="accordionItemHead" data-active-target=".accordionItemBody" data-active-scope=".accordionItem">
-						<p>Accordion Title</p>
-					</div>
-			
-					<div class="accordionItemBody">
-						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Neque fugit, ducimus, a atque perspiciatis voluptatum labore possimus, assumenda alias recusandae fugiat harum nesciunt similique optio inventore modi obcaecati tenetur incidunt.</p>
-					</div>
-				</div>
-			
-				<div class="accordionItem">
-					<div class="accordionItemHead" data-active-target=".accordionItemBody" data-active-scope=".accordionItem">
-						<p>Accordion Title</p>
-					</div>
-			
-					<div class="accordionItemBody">
-						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Neque fugit, ducimus, a atque perspiciatis voluptatum labore possimus, assumenda alias recusandae fugiat harum nesciunt similique optio inventore modi obcaecati tenetur incidunt.</p>
-					</div>
-				</div>
-			</div><!-- /.accordion -->
-			
-			<h3>Example: Simple Toggle - No Scope</h3>
+		<p class="note">Click outside the titles to hide content.</p>
+
+		<div class="toggles">
+			<h4>Example: Simple Toggle - No Scope</h4>
 			
 			<div class="toggleHead" id="toggleHead1" data-active-target="#toggleBody1">Toggle Title</div>
 			<div class="toggleBody" id="toggleBody1">
 				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Beatae labore nihil distinctio aperiam earum sapiente, nesciunt temporibus rem consequatur eius maiores quaerat deleniti alias obcaecati voluptates, suscipit at doloremque architecto!</p>
 			</div>
-
+				
 			<div class="toggleHead" id="toggleHead2" data-active-target="#toggleBody2">Toggle Title</div>
 			<div class="toggleBody" id="toggleBody2">
 				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Beatae labore nihil distinctio aperiam earum sapiente, nesciunt temporibus rem consequatur eius maiores quaerat deleniti alias obcaecati voluptates, suscipit at doloremque architecto!</p>
 			</div>
-		</section>
+		</div>
 
-		<section class="section">
-			<h3>Example: Scroll to element</h3>
+		<div class="accordion">
+			<h4>Example: Accordion - With Scope</h4>
 			
-			<p><a href="#" data-scrollto="#scrollToHere">SCROLL ME!</a></p>
-
-			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatum repudiandae cum facere ea voluptates! Recusandae eligendi sunt alias qui, provident delectus architecto numquam, sequi, accusamus voluptatum nulla, ut quos labore vel voluptas. Odit iste porro dignissimos sint magni, eveniet ullam rerum asperiores, non provident repudiandae vitae facilis modi deserunt earum. Aliquid ex voluptas nesciunt cumque vero fuga delectus porro atque harum, libero adipisci odit a ipsa soluta, iusto unde et placeat voluptatibus reprehenderit eligendi pariatur obcaecati assumenda! Eaque, repellat excepturi eos neque aperiam quae consequuntur maiores tempore eum unde, accusantium expedita eligendi porro! Atque delectus dicta vel, quidem doloribus minus quisquam dolore sapiente. Illo amet saepe in id voluptate est sint fuga, dolorum, quos architecto aperiam provident laboriosam, praesentium repellat minus iste vitae, ullam magni eius soluta! Voluptatum at nisi saepe dolorem quis rerum alias veritatis, fugit rem quo non velit, quod reiciendis distinctio laudantium, officiis tenetur. Enim aut necessitatibus, nam alias, libero modi esse autem, qui laboriosam ab doloribus. Velit maiores voluptas quidem obcaecati optio tenetur fuga cum ullam provident voluptate nihil vitae dignissimos quis nesciunt, eos ratione repudiandae enim iusto eum. Ex, hic ea sit dolore facilis in dolor. Quae sit perferendis repellat, voluptatem, explicabo fuga dignissimos necessitatibus, quidem nulla minima nam, quaerat. Officiis quasi unde sunt ab possimus nemo exercitationem, dolor iure qui eius atque deleniti quo nulla asperiores, laborum laudantium odio accusamus. Dignissimos, mollitia, fuga? Quo, eos. Ipsam nemo quis distinctio. Enim quod, dolor tempore maxime? Nihil, voluptatum laboriosam explicabo nesciunt eos quisquam aliquam earum qui, optio sapiente dolore natus rem minima placeat! Officia nam illum eligendi eius fuga cumque laborum cum molestias blanditiis debitis corporis facere, tempore, voluptates totam et officiis! Incidunt sint odit tempora, vero praesentium suscipit totam iste, quisquam delectus, est deserunt aliquam excepturi vitae! Reiciendis et sint minima consectetur, voluptate quas, unde?</p>
-			
-			<p id="scrollToHere">SCROLL TO - HERE!!!</p>
-		</section>
+			<div class="accordionItem">
+				<div class="accordionItemHead" data-active-target=".accordionItemBody" data-active-scope=".accordionItem">
+					<p>Accordion Title</p>
+				</div>
 		
-		<section class="section">
-			<h3>Example: Tabs - Accordion Demo</h3>
-			
-			<div class="block blockTabs">
-				<nav class="tabsNav">
-					<ul>
-						<li><a href="#" data-tabs-trigger="randomString1">Описание и характеристики</a></li>
-						<li><a href="#" data-tabs-trigger="randomString2">Наличност по магазини</a></li>
-						<li><a href="#" class="isActive" data-tabs-trigger="randomString3">новини за продукта</a></li>
-					</ul>
-				</nav>
-				
-				<div class="tabsContent">
-					<div class="tab" data-tabs-content="randomString1">
-						<a href="#" class="tabHead" data-tabs-trigger="randomString1">Описание и характеристики</a>
-				
-						<div class="tabBody">
-							<article class="article">
-								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Autem dignissimos nostrum eius cumque explicabo a ipsum ut, voluptatibus. Reiciendis id ex, cum velit quas vitae doloribus numquam maiores laudantium et nulla distinctio suscipit eos beatae reprehenderit ratione quam iure commodi fugiat inventore quo ipsam molestias voluptate fuga! Ullam culpa impedit, tempore accusantium ipsum id, iusto consequuntur officiis inventore at ducimus voluptatibus neque molestias! Voluptas aperiam maiores commodi quo totam quia suscipit modi quam laborum veniam a voluptatem distinctio, sint ratione exercitationem sunt veritatis ipsum animi ad. Ut qui accusamus libero dolorum tenetur voluptatem blanditiis, eligendi, ratione vel iusto magnam perferendis quis obcaecati! Delectus sit tempore labore consequatur impedit deserunt nostrum iste dicta odit, doloribus aliquam aspernatur vitae repellendus sapiente neque, voluptates quidem cum tenetur accusantium numquam temporibus. Itaque accusamus molestiae aliquam eos sit. Itaque ducimus possimus architecto iusto ipsa cum consectetur repellat amet dicta quaerat unde ullam maxime consequatur blanditiis dolores adipisci ab quas, fuga tempora id sed dignissimos. Ex quae voluptas optio quidem laborum odit sit quam alias dolorum itaque. Quae sapiente velit iusto tempore minima quos in. Nihil cumque natus quidem, perspiciatis provident reprehenderit. Temporibus quod nostrum quidem non error nobis doloribus aperiam ipsa provident in odio, porro repellendus nulla sapiente qui neque quis aspernatur saepe. Placeat, corrupti. Adipisci dicta, soluta, iusto quod laborum laboriosam eveniet tempore quibusdam ea qui dolore. Dignissimos enim suscipit praesentium natus optio facilis iusto nostrum neque reprehenderit blanditiis deserunt, nulla voluptatum aspernatur placeat illo sequi repudiandae animi porro vel voluptate molestias cum, necessitatibus, eum iste. Nulla fugiat excepturi nihil eveniet. Laborum cumque nulla rem sed molestiae maiores placeat, asperiores aliquam! Repellat ea quasi saepe, ipsa quas obcaecati odio hic modi sed. Autem assumenda facilis quae labore aliquam, laboriosam ipsum praesentium perspiciatis non minima voluptas debitis, expedita error culpa! Voluptatibus illum et, quod aliquam!</p>
-							</article>
-						</div>
-					</div><!-- /.tab -->
-					
-					<div class="tab" data-tabs-content="randomString2">
-						<a href="#" class="tabHead" data-tabs-trigger="randomString2">Наличност по магазини</a>
-				
-						<div class="tabBody">
-							<article class="article">
-								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Excepturi eligendi voluptate quam minima repellendus nostrum in adipisci est animi praesentium magni porro, mollitia, alias vero quas non doloribus exercitationem. Magnam.</p>
-							</article>
-						</div>
-					</div><!-- /.tab -->
-					
-					<div class="tab" data-tabs-content="randomString3">
-						<a href="#" class="tabHead" data-tabs-trigger="randomString3">Коментари и рейтинг</a>
-				
-						<div class="tabBody">
-							<article class="article">
-								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda officia doloremque est doloribus architecto harum nobis, illum quae expedita libero debitis voluptatem eos voluptatum cum, ut modi impedit. Mollitia, quisquam.</p>
-								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda officia doloremque est doloribus architecto harum nobis, illum quae expedita libero debitis voluptatem eos voluptatum cum, ut modi impedit. Mollitia, quisquam.</p>
-							</article>
-						</div>
-					</div><!-- /.tab -->
+				<div class="accordionItemBody">
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Neque fugit, ducimus, a atque perspiciatis voluptatum labore possimus, assumenda alias recusandae fugiat harum nesciunt similique optio inventore modi obcaecati tenetur incidunt.</p>
 				</div>
-			</div><!-- /.block -->
-
-			<div class="block blockTabs">
-				<nav class="tabsNav">
-					<ul>
-						<li><a href="#" class="isActive" data-tabs-trigger="randomString11" data-tabs-scope="scope2">Описание и характеристики</a></li>
-						<li><a href="#" data-tabs-trigger="randomString12" data-tabs-scope="scope2">Наличност по магазини</a></li>
-						<li><a href="#" data-tabs-trigger="randomString13" data-tabs-scope="scope2">новини за продукта</a></li>
-					</ul>
-				</nav>
-				
-				<div class="tabsContent">
-					<div class="tab" data-tabs-content="randomString11" data-tabs-scope="scope2">
-						<a href="#" class="tabHead" data-tabs-trigger="randomString11" data-tabs-scope="scope2">Описание и характеристики</a>
-				
-						<div class="tabBody">
-							<article class="article">
-								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Autem dignissimos nostrum eius cumque explicabo a ipsum ut, voluptatibus. Reiciendis id ex, cum velit quas vitae doloribus numquam maiores laudantium et nulla distinctio suscipit eos beatae reprehenderit ratione quam iure commodi fugiat inventore quo ipsam molestias voluptate fuga! Ullam culpa impedit, tempore accusantium ipsum id, iusto consequuntur officiis inventore at ducimus voluptatibus neque molestias! Voluptas aperiam maiores commodi quo totam quia suscipit modi quam laborum veniam a voluptatem distinctio, sint ratione exercitationem sunt veritatis ipsum animi ad. Ut qui accusamus libero dolorum tenetur voluptatem blanditiis, eligendi, ratione vel iusto magnam perferendis quis obcaecati! Delectus sit tempore labore consequatur impedit deserunt nostrum iste dicta odit, doloribus aliquam aspernatur vitae repellendus sapiente neque, voluptates quidem cum tenetur accusantium numquam temporibus. Itaque accusamus molestiae aliquam eos sit. Itaque ducimus possimus architecto iusto ipsa cum consectetur repellat amet dicta quaerat unde ullam maxime consequatur blanditiis dolores adipisci ab quas, fuga tempora id sed dignissimos. Ex quae voluptas optio quidem laborum odit sit quam alias dolorum itaque. Quae sapiente velit iusto tempore minima quos in. Nihil cumque natus quidem, perspiciatis provident reprehenderit. Temporibus quod nostrum quidem non error nobis doloribus aperiam ipsa provident in odio, porro repellendus nulla sapiente qui neque quis aspernatur saepe. Placeat, corrupti. Adipisci dicta, soluta, iusto quod laborum laboriosam eveniet tempore quibusdam ea qui dolore. Dignissimos enim suscipit praesentium natus optio facilis iusto nostrum neque reprehenderit blanditiis deserunt, nulla voluptatum aspernatur placeat illo sequi repudiandae animi porro vel voluptate molestias cum, necessitatibus, eum iste. Nulla fugiat excepturi nihil eveniet. Laborum cumque nulla rem sed molestiae maiores placeat, asperiores aliquam! Repellat ea quasi saepe, ipsa quas obcaecati odio hic modi sed. Autem assumenda facilis quae labore aliquam, laboriosam ipsum praesentium perspiciatis non minima voluptas debitis, expedita error culpa! Voluptatibus illum et, quod aliquam!</p>
-							</article>
-						</div>
-					</div><!-- /.tab -->
-					
-					<div class="tab" data-tabs-content="randomString12" data-tabs-scope="scope2">
-						<a href="#" class="tabHead" data-tabs-trigger="randomString12" data-tabs-scope="scope2">Наличност по магазини</a>
-				
-						<div class="tabBody">
-							<article class="article">
-								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Excepturi eligendi voluptate quam minima repellendus nostrum in adipisci est animi praesentium magni porro, mollitia, alias vero quas non doloribus exercitationem. Magnam.</p>
-							</article>
-						</div>
-					</div><!-- /.tab -->
-					
-					<div class="tab" data-tabs-content="randomString13" data-tabs-scope="scope2">
-						<a href="#" class="tabHead" data-tabs-trigger="randomString13" data-tabs-scope="scope2">Коментари и рейтинг</a>
-				
-						<div class="tabBody">
-							<article class="article">
-								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda officia doloremque est doloribus architecto harum nobis, illum quae expedita libero debitis voluptatem eos voluptatum cum, ut modi impedit. Mollitia, quisquam.</p>
-								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda officia doloremque est doloribus architecto harum nobis, illum quae expedita libero debitis voluptatem eos voluptatum cum, ut modi impedit. Mollitia, quisquam.</p>
-							</article>
-						</div>
-					</div><!-- /.tab -->
-				</div>
-			</div><!-- /.block -->
-		</section>
-
-		<section class="section">
-			<h3>Example: Blink fileds</h3>
-
-			<div class="form">
-				<form action="#">
-					<div class="formRow">
-						<div class="formControls">
-							<label for="first_name" class="formLabel">First Name</label>
-							
-							<div class="field">
-								<input type="text" name="first_name" id="first_name" data-blink-scope=".formControls" />
-							</div>
-						</div>
-					</div>
-
-					<div class="formRow">
-						<div class="formControls">
-							<label for="last_name" class="formLabel">Last Name</label>
-							
-							<div class="field">
-								<input type="text" name="last_name" id="last_name" data-blink-scope=".formControls" />
-							</div>
-						</div>
-					</div>
-
-					<div class="btns">
-						<button type="submit">Submit</button>
-					</div>
-				</form>
 			</div>
-		</section>
-	</div>
+		
+			<div class="accordionItem">
+				<div class="accordionItemHead" data-active-target=".accordionItemBody" data-active-scope=".accordionItem">
+					<p>Accordion Title</p>
+				</div>
+		
+				<div class="accordionItemBody">
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Neque fugit, ducimus, a atque perspiciatis voluptatum labore possimus, assumenda alias recusandae fugiat harum nesciunt similique optio inventore modi obcaecati tenetur incidunt.</p>
+				</div>
+			</div>
+		
+			<div class="accordionItem">
+				<div class="accordionItemHead" data-active-target=".accordionItemBody" data-active-scope=".accordionItem">
+					<p>Accordion Title</p>
+				</div>
+		
+				<div class="accordionItemBody">
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Neque fugit, ducimus, a atque perspiciatis voluptatum labore possimus, assumenda alias recusandae fugiat harum nesciunt similique optio inventore modi obcaecati tenetur incidunt.</p>
+				</div>
+			</div>
+		
+			<div class="accordionItem">
+				<div class="accordionItemHead" data-active-target=".accordionItemBody" data-active-scope=".accordionItem">
+					<p>Accordion Title</p>
+				</div>
+		
+				<div class="accordionItemBody">
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Neque fugit, ducimus, a atque perspiciatis voluptatum labore possimus, assumenda alias recusandae fugiat harum nesciunt similique optio inventore modi obcaecati tenetur incidunt.</p>
+				</div>
+			</div>
+		</div><!-- /.accordion -->
+	</section>
+	
+	<section class="section">
+		<h3>Function: scrollToSelectorInit</h3>
+		
+		<h4>Example: Scroll to element</h4>
+		
+		<p><a href="#" class="btn btnPrimary" data-scrollto="#scrollToHere">SCROLL ME!</a></p>
+
+		<p>&nbsp;</p>
+	
+		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatum repudiandae cum facere ea voluptates! Recusandae eligendi sunt alias qui, provident delectus architecto numquam, sequi, accusamus voluptatum nulla, ut quos labore vel voluptas. Odit iste porro dignissimos sint magni, eveniet ullam rerum asperiores, non provident repudiandae vitae facilis modi deserunt earum. Aliquid ex voluptas nesciunt cumque vero fuga delectus porro atque harum, libero adipisci odit a ipsa soluta, iusto unde et placeat voluptatibus reprehenderit eligendi pariatur obcaecati assumenda! Eaque, repellat excepturi eos neque aperiam quae consequuntur maiores tempore eum unde, accusantium expedita eligendi porro! Atque delectus dicta vel, quidem doloribus minus quisquam dolore sapiente. Illo amet saepe in id voluptate est sint fuga, dolorum, quos architecto aperiam provident laboriosam, praesentium repellat minus iste vitae, ullam magni eius soluta! Voluptatum at nisi saepe dolorem quis rerum alias veritatis, fugit rem quo non velit, quod reiciendis distinctio laudantium, officiis tenetur. Enim aut necessitatibus, nam alias, libero modi esse autem, qui laboriosam ab doloribus. Velit maiores voluptas quidem obcaecati optio tenetur fuga cum ullam provident voluptate nihil vitae dignissimos quis nesciunt, eos ratione repudiandae enim iusto eum. Ex, hic ea sit dolore facilis in dolor. Quae sit perferendis repellat, voluptatem, explicabo fuga dignissimos necessitatibus, quidem nulla minima nam, quaerat. Officiis quasi unde sunt ab possimus nemo exercitationem, dolor iure qui eius atque deleniti quo nulla asperiores, laborum laudantium odio accusamus. Dignissimos, mollitia, fuga? Quo, eos. Ipsam nemo quis distinctio. Enim quod, dolor tempore maxime? Nihil, voluptatum laboriosam explicabo nesciunt eos quisquam aliquam earum qui, optio sapiente dolore natus rem minima placeat! Officia nam illum eligendi eius fuga cumque laborum cum molestias blanditiis debitis corporis facere, tempore, voluptates totam et officiis! Incidunt sint odit tempora, vero praesentium suscipit totam iste, quisquam delectus, est deserunt aliquam excepturi vitae! Reiciendis et sint minima consectetur, voluptate quas, unde?</p>
+
+		<p>&nbsp;</p>
+		
+		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatum repudiandae cum facere ea voluptates! Recusandae eligendi sunt alias qui, provident delectus architecto numquam, sequi, accusamus voluptatum nulla, ut quos labore vel voluptas. Odit iste porro dignissimos sint magni, eveniet ullam rerum asperiores, non provident repudiandae vitae facilis modi deserunt earum. Aliquid ex voluptas nesciunt cumque vero fuga delectus porro atque harum, libero adipisci odit a ipsa soluta, iusto unde et placeat voluptatibus reprehenderit eligendi pariatur obcaecati assumenda! Eaque, repellat excepturi eos neque aperiam quae consequuntur maiores tempore eum unde, accusantium expedita eligendi porro! Atque delectus dicta vel, quidem doloribus minus quisquam dolore sapiente. Illo amet saepe in id voluptate est sint fuga, dolorum, quos architecto aperiam provident laboriosam, praesentium repellat minus iste vitae, ullam magni eius soluta! Voluptatum at nisi saepe dolorem quis rerum alias veritatis, fugit rem quo non velit, quod reiciendis distinctio laudantium, officiis tenetur. Enim aut necessitatibus, nam alias, libero modi esse autem, qui laboriosam ab doloribus. Velit maiores voluptas quidem obcaecati optio tenetur fuga cum ullam provident voluptate nihil vitae dignissimos quis nesciunt, eos ratione repudiandae enim iusto eum. Ex, hic ea sit dolore facilis in dolor. Quae sit perferendis repellat, voluptatem, explicabo fuga dignissimos necessitatibus, quidem nulla minima nam, quaerat. Officiis quasi unde sunt ab possimus nemo exercitationem, dolor iure qui eius atque deleniti quo nulla asperiores, laborum laudantium odio accusamus. Dignissimos, mollitia, fuga? Quo, eos. Ipsam nemo quis distinctio. Enim quod, dolor tempore maxime? Nihil, voluptatum laboriosam explicabo nesciunt eos quisquam aliquam earum qui, optio sapiente dolore natus rem minima placeat! Officia nam illum eligendi eius fuga cumque laborum cum molestias blanditiis debitis corporis facere, tempore, voluptates totam et officiis! Incidunt sint odit tempora, vero praesentium suscipit totam iste, quisquam delectus, est deserunt aliquam excepturi vitae! Reiciendis et sint minima consectetur, voluptate quas, unde?</p>
+		
+		<p id="scrollToHere">SCROLL TO - HERE!!!</p>
+	</section>
+	
+	<section class="section">
+		<h3>Function: tabsInit</h3>
+	
+		<p class="note">Shring the screen to see accordion.</p>
+
+		<h4>Example: Tabs/Accordion - No Scope</h4>
+		
+		<div class="block blockTabs">
+			<nav class="tabsNav">
+				<ul>
+					<li><a href="#" data-tabs-trigger="randomString1">Tab1</a></li>
+					<li><a href="#" data-tabs-trigger="randomString2">Tab2</a></li>
+					<li><a href="#" class="isActive" data-tabs-trigger="randomString3">Tab3</a></li>
+				</ul>
+			</nav>
+			
+			<div class="tabsContent">
+				<div class="tab" data-tabs-content="randomString1">
+					<a href="#" class="tabHead" data-tabs-trigger="randomString1">Tab1</a>
+			
+					<div class="tabBody">
+						<article class="article">
+							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Autem dignissimos nostrum eius cumque explicabo a ipsum ut, voluptatibus. Reiciendis id ex, cum velit quas vitae doloribus numquam maiores laudantium et nulla distinctio suscipit eos beatae reprehenderit ratione quam iure commodi fugiat inventore quo ipsam molestias voluptate fuga! Ullam culpa impedit, tempore accusantium ipsum id, iusto consequuntur officiis inventore at ducimus voluptatibus neque molestias! Voluptas aperiam maiores commodi quo totam quia suscipit modi quam laborum veniam a voluptatem distinctio, sint ratione exercitationem sunt veritatis ipsum animi ad. Ut qui accusamus libero dolorum tenetur voluptatem blanditiis, eligendi, ratione vel iusto magnam perferendis quis obcaecati! Delectus sit tempore labore consequatur impedit deserunt nostrum iste dicta odit, doloribus aliquam aspernatur vitae repellendus sapiente neque, voluptates quidem cum tenetur accusantium numquam temporibus. Itaque accusamus molestiae aliquam eos sit. Itaque ducimus possimus architecto iusto ipsa cum consectetur repellat amet dicta quaerat unde ullam maxime consequatur blanditiis dolores adipisci ab quas, fuga tempora id sed dignissimos. Ex quae voluptas optio quidem laborum odit sit quam alias dolorum itaque. Quae sapiente velit iusto tempore minima quos in. Nihil cumque natus quidem, perspiciatis provident reprehenderit. Temporibus quod nostrum quidem non error nobis doloribus aperiam ipsa provident in odio, porro repellendus nulla sapiente qui neque quis aspernatur saepe. Placeat, corrupti. Adipisci dicta, soluta, iusto quod laborum laboriosam eveniet tempore quibusdam ea qui dolore. Dignissimos enim suscipit praesentium natus optio facilis iusto nostrum neque reprehenderit blanditiis deserunt, nulla voluptatum aspernatur placeat illo sequi repudiandae animi porro vel voluptate molestias cum, necessitatibus, eum iste. Nulla fugiat excepturi nihil eveniet. Laborum cumque nulla rem sed molestiae maiores placeat, asperiores aliquam! Repellat ea quasi saepe, ipsa quas obcaecati odio hic modi sed. Autem assumenda facilis quae labore aliquam, laboriosam ipsum praesentium perspiciatis non minima voluptas debitis, expedita error culpa! Voluptatibus illum et, quod aliquam!</p>
+						</article>
+					</div>
+				</div><!-- /.tab -->
+				
+				<div class="tab" data-tabs-content="randomString2">
+					<a href="#" class="tabHead" data-tabs-trigger="randomString2">Tab2</a>
+			
+					<div class="tabBody">
+						<article class="article">
+							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Excepturi eligendi voluptate quam minima repellendus nostrum in adipisci est animi praesentium magni porro, mollitia, alias vero quas non doloribus exercitationem. Magnam.</p>
+						</article>
+					</div>
+				</div><!-- /.tab -->
+				
+				<div class="tab" data-tabs-content="randomString3">
+					<a href="#" class="tabHead" data-tabs-trigger="randomString3">Коментари и рейтинг</a>
+			
+					<div class="tabBody">
+						<article class="article">
+							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda officia doloremque est doloribus architecto harum nobis, illum quae expedita libero debitis voluptatem eos voluptatum cum, ut modi impedit. Mollitia, quisquam.</p>
+							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda officia doloremque est doloribus architecto harum nobis, illum quae expedita libero debitis voluptatem eos voluptatum cum, ut modi impedit. Mollitia, quisquam.</p>
+						</article>
+					</div>
+				</div><!-- /.tab -->
+			</div>
+		</div><!-- /.block -->
+	
+		<h4>Example: Tabs/Accordion - With Scope</h4>
+
+		<p class="note">"data-tabs-scope" attribute is required for multiple instances!</p>
+
+		<div class="block blockTabs">
+			<nav class="tabsNav">
+				<ul>
+					<li><a href="#" class="isActive" data-tabs-trigger="randomString11" data-tabs-scope="scope2">Tab1</a></li>
+					<li><a href="#" data-tabs-trigger="randomString12" data-tabs-scope="scope2">Tab2</a></li>
+					<li><a href="#" data-tabs-trigger="randomString13" data-tabs-scope="scope2">Tab3</a></li>
+				</ul>
+			</nav>
+			
+			<div class="tabsContent">
+				<div class="tab" data-tabs-content="randomString11" data-tabs-scope="scope2">
+					<a href="#" class="tabHead" data-tabs-trigger="randomString11" data-tabs-scope="scope2">Tab1</a>
+			
+					<div class="tabBody">
+						<article class="article">
+							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Autem dignissimos nostrum eius cumque explicabo a ipsum ut, voluptatibus. Reiciendis id ex, cum velit quas vitae doloribus numquam maiores laudantium et nulla distinctio suscipit eos beatae reprehenderit ratione quam iure commodi fugiat inventore quo ipsam molestias voluptate fuga! Ullam culpa impedit, tempore accusantium ipsum id, iusto consequuntur officiis inventore at ducimus voluptatibus neque molestias! Voluptas aperiam maiores commodi quo totam quia suscipit modi quam laborum veniam a voluptatem distinctio, sint ratione exercitationem sunt veritatis ipsum animi ad. Ut qui accusamus libero dolorum tenetur voluptatem blanditiis, eligendi, ratione vel iusto magnam perferendis quis obcaecati! Delectus sit tempore labore consequatur impedit deserunt nostrum iste dicta odit, doloribus aliquam aspernatur vitae repellendus sapiente neque, voluptates quidem cum tenetur accusantium numquam temporibus. Itaque accusamus molestiae aliquam eos sit. Itaque ducimus possimus architecto iusto ipsa cum consectetur repellat amet dicta quaerat unde ullam maxime consequatur blanditiis dolores adipisci ab quas, fuga tempora id sed dignissimos. Ex quae voluptas optio quidem laborum odit sit quam alias dolorum itaque. Quae sapiente velit iusto tempore minima quos in. Nihil cumque natus quidem, perspiciatis provident reprehenderit. Temporibus quod nostrum quidem non error nobis doloribus aperiam ipsa provident in odio, porro repellendus nulla sapiente qui neque quis aspernatur saepe. Placeat, corrupti. Adipisci dicta, soluta, iusto quod laborum laboriosam eveniet tempore quibusdam ea qui dolore. Dignissimos enim suscipit praesentium natus optio facilis iusto nostrum neque reprehenderit blanditiis deserunt, nulla voluptatum aspernatur placeat illo sequi repudiandae animi porro vel voluptate molestias cum, necessitatibus, eum iste. Nulla fugiat excepturi nihil eveniet. Laborum cumque nulla rem sed molestiae maiores placeat, asperiores aliquam! Repellat ea quasi saepe, ipsa quas obcaecati odio hic modi sed. Autem assumenda facilis quae labore aliquam, laboriosam ipsum praesentium perspiciatis non minima voluptas debitis, expedita error culpa! Voluptatibus illum et, quod aliquam!</p>
+						</article>
+					</div>
+				</div><!-- /.tab -->
+				
+				<div class="tab" data-tabs-content="randomString12" data-tabs-scope="scope2">
+					<a href="#" class="tabHead" data-tabs-trigger="randomString12" data-tabs-scope="scope2">Tab2</a>
+			
+					<div class="tabBody">
+						<article class="article">
+							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Excepturi eligendi voluptate quam minima repellendus nostrum in adipisci est animi praesentium magni porro, mollitia, alias vero quas non doloribus exercitationem. Magnam.</p>
+						</article>
+					</div>
+				</div><!-- /.tab -->
+				
+				<div class="tab" data-tabs-content="randomString13" data-tabs-scope="scope2">
+					<a href="#" class="tabHead" data-tabs-trigger="randomString13" data-tabs-scope="scope2">Коментари и рейтинг</a>
+			
+					<div class="tabBody">
+						<article class="article">
+							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda officia doloremque est doloribus architecto harum nobis, illum quae expedita libero debitis voluptatem eos voluptatum cum, ut modi impedit. Mollitia, quisquam.</p>
+							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda officia doloremque est doloribus architecto harum nobis, illum quae expedita libero debitis voluptatem eos voluptatum cum, ut modi impedit. Mollitia, quisquam.</p>
+						</article>
+					</div>
+				</div><!-- /.tab -->
+			</div>
+		</div><!-- /.block -->
+	</section>
+	
+	<section class="section">
+		<h3>Function: blinkFieldsInit</h3>
+		
+		<h4>Example: Blink fileds</h4>
+	
+		<div class="form">
+			<form action="#">
+				<div class="formRow">
+					<div class="formControls">
+						<label for="first_name" class="formLabel">First Name</label>
+						
+						<div class="field">
+							<input type="text" name="first_name" id="first_name" data-blink-scope=".formControls" />
+						</div>
+					</div>
+				</div>
+	
+				<div class="formRow">
+					<div class="formControls">
+						<label for="last_name" class="formLabel">Last Name</label>
+						
+						<div class="field">
+							<input type="text" name="last_name" id="last_name" data-blink-scope=".formControls" />
+						</div>
+					</div>
+				</div>
+	
+				<div class="btns">
+					<button type="submit" class="btn btnPrimary">Submit</button>
+				</div>
+			</form>
+		</div>
+	</section>
 </div><!-- /.container -->
 </body>
 </html>

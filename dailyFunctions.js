@@ -9,7 +9,10 @@
 	\* ------------------------------------------------------------ */
 
 	/**
-	 * Function that debounce certain event.
+	 * Debounce execution of a certain function.
+	 *
+	 * Example:
+	 * Global.debounce(myFunctionName)();
 	 * 
 	 * @public
 	 * @param  {Function}
@@ -105,9 +108,10 @@
 	};
 
 	/**
-	 * Hide function.
+	 * Universal hide function. Check if event's target matches given selectors or esc key is pressed.
 	 *
-	 * Check if event's target matches given selectors or esc key is pressed.
+	 * Example:
+	 * Global.basicHide(event, '.accordionItemHead, .accordionItemBody, .accordionItem');
 	 * 
 	 * @public
 	 * @param  {event}
@@ -126,47 +130,6 @@
 		if ((!$target.closest(selector).length) || (evt.keyCode == 27 /* esc key*/)) {
 			$(selector).removeClass('isActive');
 		}
-	};
-
-	/**
-	 * Hide function.
-	 *
-	 * Check if event's target matches given selectors or esc key is pressed. Work only within scope.
-	 * 
-	 * @public
-	 * @param  {event}
-	 * @param  {string|Object|Array} Requre only ID's
-	 * @return {void}
-	 */
-	Global.practicalHide = function(evt, selector) {
-		var $elements = $(selector);
-
-		// stop execution when parameters are not valid
-		if (typeof evt === undefined || !$elements.length) {
-			// console.error('basicInteractionHide: Invalid parameters!');
-			return;
-		}
-
-		var $target = $(evt.target);
-		var evtType = evt.type;
-
-		$elements.each(function(index, el) {
-			var $element = $(el);
-
-			if (evtType === 'keyup' && evt.keyCode === 27 /* esc key*/) {
-				$element.removeClass('isActive');
-			}
-
-			if (evtType === 'click' || evtType === 'touchstart') {
-				console.log($target, $element, !$target.closest($element).length);
-
-				if (!$target.closest($element).length) {
-					if ($element.hasClass('isActive')) {
-						$element.removeClass('isActive');
-					}
-				}
-			}
-		});
 	};
 
 	/**
@@ -222,47 +185,6 @@
 	};
 
 	/**
-	 * Stick element to viewport.
-	 *
-	 * @public
-	 * @param  {string|Object}
-	 * @param  {string|Object}
-	 * @param  {string|Object}
-	 * @return {void}
-	 *
-	 * @TO DO: Transform function to use data attributes.
-	 */
-	Global.sticky = function(element, pivotTop, pivotBottom) {
-		var $element = $(element);
-		var $pivotTop = $(pivotTop);
-		var $pivotBottom = $(pivotBottom);
-		var offsetTop;
-		var offsetBottom;
-	
-		// stop execution when parameters are not valid
-		if (!$element.length || !$pivotTop.length || !$pivotBottom.length) {
-			// console.log('sticky: Invalid parameters!');
-			return;
-		}
-
-		// get pivot's offsets
-		offsetTop = $pivotTop.offset().top;
-		offsetBottom = $pivotBottom.offset().top;
-
-		if ($win.scrollTop() > offsetTop) {
-			$element.addClass('isSticky');
-		} else {
-			$element.removeClass('isSticky');
-		}
-
-		if ($win.scrollTop() > offsetBottom - $element.outerHeight()) {
-			$element.addClass('hasBoundary');
-		} else {
-			$element.removeClass('hasBoundary');
-		}
-	};
-
-	/**
 	 * Tabs/Accordion.
 	 * 
 	 * Required:
@@ -270,7 +192,7 @@
 	 * - 'data-tabs-content' - Set to each tab's content. Need unique, random string to link with triggers
 	 *
 	 * Optional:
-	 * - 'data-tabs-scope' - Set to each tab's content. Need unique, random string to link with triggers
+	 * - 'data-tabs-scope' - Set to each trigger and tab's content. Need unique, random string to link with triggers
 	 * 
 	 * @public
 	 * @return {void}
@@ -371,6 +293,7 @@
 
 		// stop execution when elements does missing 
 		if (!$inputs.length) {
+			// console.error('blinkFieldsInit: Invalid parameters!');
 			return;
 		}
 
@@ -418,6 +341,47 @@
 	};
 
 	/**
+	 * Stick element to viewport.
+	 *
+	 * @public
+	 * @param  {string|Object}
+	 * @param  {string|Object}
+	 * @param  {string|Object}
+	 * @return {void}
+	 *
+	 * @TO DO: Transform function to use data attributes.
+	 */
+	Global.sticky = function(element, pivotTop, pivotBottom) {
+		var $element = $(element);
+		var $pivotTop = $(pivotTop);
+		var $pivotBottom = $(pivotBottom);
+		var offsetTop;
+		var offsetBottom;
+	
+		// stop execution when parameters are not valid
+		if (!$element.length || !$pivotTop.length || !$pivotBottom.length) {
+			// console.log('sticky: Invalid parameters!');
+			return;
+		}
+
+		// get pivot's offsets
+		offsetTop = $pivotTop.offset().top;
+		offsetBottom = $pivotBottom.offset().top;
+
+		if ($win.scrollTop() > offsetTop) {
+			$element.addClass('isSticky');
+		} else {
+			$element.removeClass('isSticky');
+		}
+
+		if ($win.scrollTop() > offsetBottom - $element.outerHeight()) {
+			$element.addClass('hasBoundary');
+		} else {
+			$element.removeClass('hasBoundary');
+		}
+	};
+
+	/**
 	 * Check if element is within the viewport.
 	 *
 	 * @private
@@ -425,6 +389,7 @@
 	 * @param  {bool} Default value true.
 	 * @return {void}
 	 *
+	 * [NEED REFACTORING]
 	 * @TO DO: Transform function to use data attributes.
 	 */
 	var checkPosition = function(elements, removeClass) {
@@ -459,15 +424,16 @@
 	 * 
 	 * @return {void}
 	 *
+	 * [NEED REFACTORING]
 	 * @TO DO: Transform function to use data attributes.
 	 */
-	Global.imageChangerInit = function() {
-		var $target = $('#jsImageChangerTarget');
-		var $triggers = $('.jsImageChangerTrigger');
+	Global.photoChangerInit = function() {
+		var $target = $('#jsPhotoChangerTarget');
+		var $triggers = $('.jsPhotoChangerTrigger');
 
 		// stop execution when parameters are not valid
 		if (!$target.length || !$triggers.length) {
-			console.log('imageChanger: Invalid parameters!');
+			console.error('photoChanger: Invalid parameters!');
 			return;
 		}
 
@@ -496,20 +462,7 @@
 		#EVENT BINDS
 	\* ------------------------------------------------------------ */
 
-	$doc.on('keyup', function(event) {
-		// Global.practicalHide(event, ['#toggleHead1']);
-		Global.basicHide(event, '.toggleHead, .toggleBody');
-		Global.basicHide(event, '.accordionItemHead, .accordionItemBody, .accordionItem');
-	});
-
-	$doc.on('click', function(event) {
-		// Global.practicalHide(event, ['#toggleHead1']);
-		Global.basicHide(event, '.toggleHead, .toggleBody');
-		Global.basicHide(event, '.accordionItemHead, .accordionItemBody, .accordionItem');
-	});
-
-	$doc.on('touchstart', function(event) {
-		// Global.practicalHide(event, ['#toggleHead1']);
+	$doc.on('click keyup touchstart', function(event) {
 		Global.basicHide(event, '.toggleHead, .toggleBody');
 		Global.basicHide(event, '.accordionItemHead, .accordionItemBody, .accordionItem');
 	});
@@ -523,10 +476,10 @@
 	});
 
 	$win.on('resize', function() {
-		// Global.debounce(myFunctionName)();
+		
 	});
 
 	$win.on('scroll', function() {
-		// Global.debounce(myFunctionName)();
+		
 	});
 })(jQuery, window, document);
