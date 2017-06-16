@@ -20,7 +20,7 @@
 		var timeoutId = -1;
 
 		function debounced() {
-			if (typeof wait == 'undefined') { wait = 200; }
+			if (typeof wait == undefined) { wait = 200; }
 			if (timeoutId != -1) {
 				clearTimeout(timeoutId);
 			}
@@ -47,6 +47,7 @@
 
 		// stop execution when elements does missing 
 		if (!$triggers.length) {
+			// console.error('makeActiveInit: Invalid parameters'));
 			return;
 		}
 
@@ -115,8 +116,8 @@
 	 */
 	Global.basicHide = function(evt, selector) {
 		// stop execution when parameters are not valid
-		if (typeof evt === 'undefined' || !$(selector).length) {
-			console.error('basicHide: Invalid parameters!');
+		if (typeof evt === undefined || !$(selector).length) {
+			// console.error('basicHide: Invalid parameters!');
 			return;
 		}
 
@@ -141,8 +142,8 @@
 		var $elements = $(selector);
 
 		// stop execution when parameters are not valid
-		if (typeof evt === 'undefined' || !$elements.length) {
-			console.log('basicInteractionHide: Invalid parameters!');
+		if (typeof evt === undefined || !$elements.length) {
+			// console.error('basicInteractionHide: Invalid parameters!');
 			return;
 		}
 
@@ -186,6 +187,7 @@
 
 		// stop execution when element does not exist
 		if (!$triggers.length) {
+			// console.error('scrollToSelectorInit: Invalid parameters!');
 			return;
 		}
 
@@ -238,7 +240,7 @@
 		var offsetBottom;
 	
 		// stop execution when parameters are not valid
-		if ($element.length === 0 || $pivotTop.length === 0 || $pivotBottom.length === 0) {
+		if (!$element.length || !$pivotTop.length || !$pivotBottom.length) {
 			// console.log('sticky: Invalid parameters!');
 			return;
 		}
@@ -264,81 +266,92 @@
 	 * Tabs/Accordion.
 	 * 
 	 * Required:
-	 * - 'data-tabs-trigger' - Need unique, random string to connect to contents
-	 * - 'data-tabs-content' - Need unique, random string to connect to triggers
+	 * - 'data-tabs-trigger' - Set to all triggers. Need unique, random string to link with contents
+	 * - 'data-tabs-content' - Set to each tab's content. Need unique, random string to link with triggers
+	 *
+	 * Optional:
+	 * - 'data-tabs-scope' - Set to each tab's content. Need unique, random string to link with triggers
 	 * 
 	 * @public
 	 * @return {void}
 	 * 
-	 * @TO DO: Add scope to handle multiple instances.
-	 * @TO DO: Animate active tab.
 	 */
 	Global.tabsInit = function() {
-		// var $container = $(container);
 		var $tabsTriggers = $('[data-tabs-trigger]');
 		var $tabsContents = $('[data-tabs-content]');
 
 		// stop execution when parameters are not valid
 		if (!$tabsTriggers.length || !$tabsContents.length) {
-			console.log('basicTabsInit: Invalid parameters!');
+			console.error('tabsInit: Invalid parameters!');
 			return;
 		}
 
-		// handle active trigger
-		// function updateTriggers(id) {
-		// 	$tabsTriggers.removeClass('isActive');
-		// 	$tabsTriggers.each(function() {
-		// 		var	$that = $(this);
+		// handle active triggers and tabs
+		function show(id, scope) {
+			if (scope === "" || scope === undefined || scope === false) {
+				console.warn('tabsInit: Require "data-tabs-scope" attribute to handle multiple instances!', scope);
 
-		// 		if ($that.data('tabs-trigger') === id) {
-		// 			$that.addClass('isActive');
-		// 		}
-		// 	});
-		// }
+				$tabsTriggers.removeClass('isActive');
+				$tabsContents.removeClass('isActive');
+				
+				for (var i = 0; i < $tabsTriggers.length; i++) {
+					var $current = $($tabsTriggers[i]);
 
-		// handle active tab
-		// function updateContents(id) {
-		// 	$tabsContents.removeClass('isActive');
-		// 	$tabsContents.each(function() {
-		// 		var	$that = $(this);
+					if ($current.data('tabs-trigger') === id) {
+						$current.addClass('isActive');
+					}
+				}
 
-		// 		if ($that.data('tabs-content') === id) {
-		// 			$that.addClass('isActive');
-		// 		}
-		// 	});
-		// }
+				for (var i = 0; i < $tabsContents.length; i++) {
+					var $current = $($tabsContents[i]);
 
-		// select first tab
-		// updateTriggers($($tabsTriggers[0]).data('tabs-trigger'));
-		// updateContents($($tabsContents[0]).data('tabs-content'));
-		
+					if ($current.data('tabs-content') === id) {
+						$current.addClass('isActive');
+					}
+				}
+			} else {
+				for (var i = 0; i < $tabsTriggers.length; i++) {
+					var $current = $($tabsTriggers[i]);
+
+					if ($current.data('tabs-scope') === scope) {
+						$current.removeClass('isActive');
+					}
+					if ($current.data('tabs-trigger') === id && $current.data('tabs-scope') === scope) {
+						$current.addClass('isActive');
+					}
+				}
+
+				for (var i = 0; i < $tabsContents.length; i++) {
+					var $current = $($tabsContents[i]);
+
+					if ($current.data('tabs-scope') === scope) {
+						$current.removeClass('isActive');
+					}
+					if ($current.data('tabs-content') === id && $current.data('tabs-scope') === scope) {
+						$current.addClass('isActive');
+					}
+				}
+			}
+		}
+
 		// switch between tabs
 		$tabsTriggers.on('click', function(evt) {
 			evt.preventDefault();
 
-			var	id = $(this).data('tabs-trigger');
+			var $this = $(this);
+			var	id = $this.data('tabs-trigger');
+			var	scope = $this.data('tabs-scope');
 
-			if (!$(this).hasClass('isActive')) {
-				// updateTriggers(id);
-				// updateContents(id);
-				
-				$tabsTriggers.removeClass('isActive');
-				$tabsContents.removeClass('isActive');
-				$tabsTriggers.each(function() {
-					var	$that = $(this);
-
-					if ($that.data('tabs-trigger') === id) {
-						$that.addClass('isActive');
-					}
-				});
-				$tabsContents.each(function() {
-					var	$that = $(this);
-
-					if ($that.data('tabs-content') === id) {
-						$that.addClass('isActive');
-					}
-				});
+			if (!$this.hasClass('isActive')) {
+				show(id, scope);
 			}
+		});
+		
+		// show active tabs after init
+		$tabsTriggers.filter('.isActive').each(function() {
+			var $this = $(this);
+
+			show($this.data('tabs-trigger'), $this.data('tabs-scope'));
 		});
 	};
 
@@ -416,8 +429,8 @@
 	 */
 	var checkPosition = function(elements, removeClass) {
 		// set default values
-		removeClass = (typeof removeClass == 'undefined') ? true : removeClass;
-		elements = (typeof elements == 'undefined') ? '.animate' : elements;
+		removeClass = (typeof removeClass == undefined) ? true : removeClass;
+		elements = (typeof elements == undefined) ? '.animate' : elements;
 		
 		var $animationItems = $(elements);
 		var winH = $win.height();
