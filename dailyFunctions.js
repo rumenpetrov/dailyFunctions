@@ -3,10 +3,138 @@
 	var $doc = $(document);
 
 	window.Global = window.Global || {};
+	window.Helpers = window.Helpers || {};
 
 	/* ------------------------------------------------------------ *\
 		#FUNCTION DEFINITIONS
 	\* ------------------------------------------------------------ */
+
+	// Start BETA functions
+
+	/**
+	 * Get trigger, target and optionally scope elements and toggle classes on them.
+	 *
+	 * Required:
+	 * - 'data-linker-target' - Get CSS style selector. Set the attribute to a target element.
+	 *
+	 * Optional:
+	 * - 'data-linker-scope' - Get CSS style selector. Use it to work with multiple targets. 
+	 *
+	 * @public
+	 * @return {Object} All public methods
+	 */
+	Helpers.linker = (function() {
+		// define all elements
+		options = {
+			$currentTrigger: null,
+			$currentTarget: null,
+			$currentScope: null
+		};
+
+		function _init() {
+			var $triggers = $('[data-linker-target]');
+
+			// stop execution when elements does missing
+			if (!$triggers.length) {
+				return;	
+			}
+
+			// events
+			$triggers.on('click', function() {
+				_inputReader(this);
+			});
+		}
+
+		// check for data attributes, get all elements and handle errors
+		function _inputReader(element) {
+			options.$currentTrigger = $(element);
+
+			if (!options.$currentTrigger.data('linker-scope')) {
+				options.$currentTarget = $(options.$currentTrigger.data('linker-target'));
+				
+				// handle missing target
+				if (!options.$currentTarget.length) {
+					console.error('linker: Missing target element!');
+					return;
+				}
+
+				// handle multiple targets
+				if (options.$currentTarget.length > 1) {
+					console.error('linker: Detect multiple target elements. Require "data-linker-scope"!');
+					return;
+				}
+			} else {
+				options.$currentScope = options.$currentTrigger.closest(options.$currentTrigger.data('linker-scope'));
+				options.$currentTarget = options.$currentScope.find(options.$currentTrigger.data('linker-target'));
+
+				// handle missing scope
+				if (!options.$currentScope.length) {
+					console.error('linker: Missing scope element! Remove "data-linker-scope" attribute or add scope element!');
+					return;
+				}
+			}
+
+			_render();
+		}
+
+		// switch classes
+		function _render() {
+			if (options.$currentScope === null) {
+				// toggle class on trigger and target element when scope is missing
+				if (options.$currentTrigger.hasClass('has-flag')) {
+					options.$currentTrigger.removeClass('has-flag');
+					options.$currentTarget.removeClass('has-flag');
+				} else {
+					options.$currentTrigger.addClass('has-flag');
+					options.$currentTarget.addClass('has-flag');
+				}
+			} else {
+				// toggle class on scope element
+				if (!options.$currentScope.length) {
+					console.error('linker: Missing scope element! Check "data-linker-scope" attribute!');
+					return;
+				}
+				if (options.$currentScope.hasClass('has-flag')) {
+					options.$currentScope.removeClass('has-flag');
+				} else {
+					options.$currentScope.addClass('has-flag');
+				}
+			}
+		}
+		
+		return {
+			init: function() {
+				_init();
+			}
+		};
+	})();
+
+	/**
+	 * Universal hide function. Check if event's target matches given selectors or esc key is pressed.
+	 *
+	 * Example:
+	 * basicHide(event, '.accordion-item-head, .accordion-item-body, .accordion-item');
+	 * 
+	 * @public
+	 * @param  {event}
+	 * @param  {string|Object}
+	 * @return {void}
+	 */
+	Helpers.basicHide = function(evt, selector) {
+		// stop execution when parameters are not valid
+		if (typeof evt === undefined || !$(selector).length) {
+			// console.error('basicHide: Invalid parameters!');
+			return;
+		}
+
+		var $target = $(evt.target);
+
+		if ((!$target.closest(selector).length) || (evt.keyCode == 27 /* esc key*/)) {
+			$(selector).removeClass('has-flag');
+		}
+	};
+
+	// End BETA functions
 
 	/**
 	 * Debounce execution of a certain function.
