@@ -1,5 +1,5 @@
-# Helpers
-Namespace with useful functions for frontend development.
+# rookieUI
+Common UI components for frontend development.
 
 All functions have status that indicates their current state.
 
