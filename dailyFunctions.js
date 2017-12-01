@@ -2,16 +2,42 @@
 	var $win = $(window);
 	var $doc = $(document);
 
-	window.Global = window.Global || {};
 	window.Helpers = window.Helpers || {};
 
 	/* ------------------------------------------------------------ *\
 		#FUNCTION DEFINITIONS
 	\* ------------------------------------------------------------ */
 
-	// Start BETA functions
+	/**
+	 * [status: STABLE]
+	 * 
+	 * Debounce execution of a certain function.
+	 *
+	 * Example:
+	 * Helpers.debounce(myFunctionName)();
+	 * 
+	 * @public
+	 * @param  {Function}
+	 * @param  {int}
+	 * @return {Function}
+	 */
+	Helpers.debounce = function(fun, wait) {
+		var timeoutId = -1;
+
+		function debounced() {
+			if (typeof wait == undefined) { wait = 200; }
+			if (timeoutId != -1) {
+				clearTimeout(timeoutId);
+			}
+			timeoutId = setTimeout(fun, wait);
+		}
+
+		return debounced;
+	};
 
 	/**
+	 * [status: BETA]
+	 * 
 	 * Get trigger, target and optionally scope elements and toggle classes on them.
 	 *
 	 * Required:
@@ -22,6 +48,9 @@
 	 *
 	 * @public
 	 * @return {Object} All public methods
+	 *
+	 * @TODO:
+	 * - Testing.
 	 */
 	Helpers.linker = (function() {
 		// define all elements
@@ -110,58 +139,8 @@
 	})();
 
 	/**
-	 * Universal hide function. Check if event's target matches given selectors or esc key is pressed.
-	 *
-	 * Example:
-	 * basicHide(event, '.accordion-item-head, .accordion-item-body, .accordion-item');
+	 * [status: STABLE]
 	 * 
-	 * @public
-	 * @param  {event}
-	 * @param  {string|Object}
-	 * @return {void}
-	 */
-	Helpers.basicHide = function(evt, selector) {
-		// stop execution when parameters are not valid
-		if (typeof evt === undefined || !$(selector).length) {
-			// console.error('basicHide: Invalid parameters!');
-			return;
-		}
-
-		var $target = $(evt.target);
-
-		if ((!$target.closest(selector).length) || (evt.keyCode == 27 /* esc key*/)) {
-			$(selector).removeClass('has-flag');
-		}
-	};
-
-	// End BETA functions
-
-	/**
-	 * Debounce execution of a certain function.
-	 *
-	 * Example:
-	 * Global.debounce(myFunctionName)();
-	 * 
-	 * @public
-	 * @param  {Function}
-	 * @param  {int}
-	 * @return {Function}
-	 */
-	Global.debounce = function(fun, wait) {
-		var timeoutId = -1;
-
-		function debounced() {
-			if (typeof wait == undefined) { wait = 200; }
-			if (timeoutId != -1) {
-				clearTimeout(timeoutId);
-			}
-			timeoutId = setTimeout(fun, wait);
-		}
-
-		return debounced;
-	};
-
-	/**
 	 * Connects elements.
 	 *
 	 * Required:
@@ -172,8 +151,11 @@
 	 * 
 	 * @public
 	 * @return {void}
+	 *
+	 * @TODO:
+	 * - Will be replaced with "Helpers.linker".
 	 */
-	Global.makeActiveInit = function() {
+	Helpers.makeActiveInit = function() {
 		var $triggers = $('[data-active-target]');
 
 		// stop execution when elements does missing 
@@ -236,17 +218,22 @@
 	};
 
 	/**
+	 * [status: STABLE]
 	 * Universal hide function. Check if event's target matches given selectors or esc key is pressed.
 	 *
 	 * Example:
-	 * Global.basicHide(event, '.accordionItemHead, .accordionItemBody, .accordionItem');
+	 * Helpers.basicHide(event, '.accordionItemHead, .accordionItemBody, .accordionItem');
 	 * 
 	 * @public
 	 * @param  {event}
 	 * @param  {string|Object}
 	 * @return {void}
+	 *
+	 * @TODO:
+	 * - Change active class name.
+	 * - Add active class dynamically.
 	 */
-	Global.basicHide = function(evt, selector) {
+	Helpers.basicHide = function(evt, selector) {
 		// stop execution when parameters are not valid
 		if (typeof evt === undefined || !$(selector).length) {
 			// console.error('basicHide: Invalid parameters!');
@@ -261,6 +248,8 @@
 	};
 
 	/**
+	 * [status: STABLE]
+	 * 
 	 * Scroll the window to element.
 	 *
 	 * Required:
@@ -272,7 +261,7 @@
 	 * @public
 	 * @return {void}
 	 */
-	Global.scrollToSelectorInit = function() {
+	Helpers.scrollToSelectorInit = function() {
 		var $triggers = $('[data-scrollto]');
 		var offsetTop = 0;
 
@@ -313,6 +302,8 @@
 	};
 
 	/**
+	 * [status: STABLE]
+	 * 
 	 * Tabs/Accordion.
 	 * 
 	 * Required:
@@ -324,9 +315,13 @@
 	 * 
 	 * @public
 	 * @return {void}
-	 * 
+	 *
+	 * @TODO:
+	 * - Need refactoring
+	 * - Change active classes names.
+	 * - Add optional url change.
 	 */
-	Global.tabsInit = function() {
+	Helpers.tabsInit = function() {
 		var $tabsTriggers = $('[data-tabs-trigger]');
 		var $tabsContents = $('[data-tabs-content]');
 
@@ -406,15 +401,20 @@
 	};
 
 	/**
+	 * [status: STABLE]
+	 * 
 	 * Field's labels moving effect.
 	 *
 	 * Required:
 	 * - 'data-blink-scope' - Get CSS style selector.
 	 * 
-	 * @private
+	 * @public
 	 * @return {void}
+	 *
+	 * @TODO:
+	 * - Change active class name.
 	 */
-	var blinkFieldsInit = function() {
+	Helpers.blinkFieldsInit = function() {
 		var $inputs = $('[data-blink-scope]');
 		var $currentElement;
 		var scopeSelector;
@@ -469,6 +469,8 @@
 	};
 
 	/**
+	 * [status: STABLE]
+	 * 
 	 * Stick element to viewport.
 	 *
 	 * @public
@@ -477,9 +479,12 @@
 	 * @param  {string|Object}
 	 * @return {void}
 	 *
-	 * @TO DO: Transform function to use data attributes.
+	 * @TO DO:
+	 * - Transform function to use data attributes.
+	 * - Change window reference.
+	 * - Change active classes names.
 	 */
-	Global.sticky = function(element, pivotTop, pivotBottom) {
+	Helpers.sticky = function(element, pivotTop, pivotBottom) {
 		var $element = $(element);
 		var $pivotTop = $(pivotTop);
 		var $pivotBottom = $(pivotBottom);
@@ -510,17 +515,22 @@
 	};
 
 	/**
+	 * [status: STABLE]
+	 * 
 	 * Check if element is within the viewport.
 	 *
-	 * @private
+	 * @public
 	 * @param  {string|Object}
 	 * @param  {bool} Default value true.
 	 * @return {void}
 	 *
-	 * [NEED REFACTORING]
-	 * @TO DO: Transform function to use data attributes.
+	 * @TO DO:
+	 * - Need refactoring.
+	 * - Transform function to use data attributes.
+	 * - Change window reference.
+	 * - Change active class name.
 	 */
-	var checkPosition = function(elements, removeClass) {
+	Helpers.checkPosition = function(elements, removeClass) {
 		// set default values
 		removeClass = (typeof removeClass == undefined) ? true : removeClass;
 		elements = (typeof elements == undefined) ? '.animate' : elements;
@@ -548,14 +558,18 @@
 	};
 
 	/**
-	 * Change image background on hover.
+	 * [status: STABLE]
 	 * 
+	 * Change image background on hover.
+	 *
+	 * @public
 	 * @return {void}
 	 *
-	 * [NEED REFACTORING]
-	 * @TO DO: Transform function to use data attributes.
+	 * @TO DO:
+	 * - Need refactoring.
+	 * - Transform function to use data attributes.
 	 */
-	Global.photoChangerInit = function() {
+	Helpers.photoChangerInit = function() {
 		var $target = $('#jsPhotoChangerTarget');
 		var $triggers = $('.jsPhotoChangerTrigger');
 
@@ -585,29 +599,4 @@
 			changeSource($this.data('bg'));
 		});
 	};
-
-	/* ------------------------------------------------------------ *\
-		#EVENT BINDS
-	\* ------------------------------------------------------------ */
-
-	$doc.on('click keyup touchstart', function(event) {
-		Global.basicHide(event, '.toggleHead, .toggleBody');
-		Global.basicHide(event, '.accordionItemHead, .accordionItemBody, .accordionItem');
-	});
-
-	$doc.ready(function() {
-		blinkFieldsInit();
-	});
-
-	$win.on('load', function() {
-
-	});
-
-	$win.on('resize', function() {
-		
-	});
-
-	$win.on('scroll', function() {
-		
-	});
 })(jQuery, window, document);

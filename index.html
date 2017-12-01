@@ -82,9 +82,15 @@
 	<script src="dailyFunctions.js"></script>
 	<script>
 		$(document).ready(function() {
-			Global.makeActiveInit();
-			Global.scrollToSelectorInit();
-			Global.tabsInit();
+			Helpers.makeActiveInit();
+			Helpers.scrollToSelectorInit();
+			Helpers.tabsInit();
+			Helpers.blinkFieldsInit();
+		});
+
+		$(document).on('click keyup touchstart', function(event) {
+			Helpers.basicHide(event, '.toggleHead, .toggleBody');
+			Helpers.basicHide(event, '.accordionItemHead, .accordionItemBody, .accordionItem');
 		});
 	</script>
 </head>

@@ -1,2 +1,9 @@
-# dailyFunctions
-A list of useful everyday functions.
+# Helpers
+Namespace with useful functions for frontend development.
+
+All functions have status that indicates their current state.
+
+Status types:
+- STABLE - Function is tested.
+- BETA - Function need more testing.
+- DEV - Function is in development state.
