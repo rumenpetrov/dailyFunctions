@@ -2,7 +2,7 @@
 	var $win = $(window);
 	var $doc = $(document);
 
-	window.Helpers = window.Helpers || {};
+	window.Rookie = window.Rookie || {};
 
 	/* ------------------------------------------------------------ *\
 		#FUNCTION DEFINITIONS
@@ -14,14 +14,14 @@
 	 * Debounce execution of a certain function.
 	 *
 	 * Example:
-	 * Helpers.debounce(myFunctionName)();
+	 * Rookie.debounce(myFunctionName)();
 	 * 
 	 * @public
 	 * @param  {Function}
 	 * @param  {int}
 	 * @return {Function}
 	 */
-	Helpers.debounce = function(fun, wait) {
+	Rookie.debounce = function(fun, wait) {
 		var timeoutId = -1;
 
 		function debounced() {
@@ -52,7 +52,7 @@
 	 * @TODO:
 	 * - Testing.
 	 */
-	Helpers.linker = (function() {
+	Rookie.linker = (function() {
 		// define all elements
 		options = {
 			$currentTrigger: null,
@@ -106,7 +106,7 @@
 			_render();
 		}
 
-		// switch classes
+		// toggle classes
 		function _render() {
 			if (options.$currentScope === null) {
 				// toggle class on trigger and target element when scope is missing
@@ -153,9 +153,9 @@
 	 * @return {void}
 	 *
 	 * @TODO:
-	 * - Will be replaced with "Helpers.linker".
+	 * - Will be replaced with "Rookie.linker".
 	 */
-	Helpers.makeActiveInit = function() {
+	Rookie.makeActiveInit = function() {
 		var $triggers = $('[data-active-target]');
 
 		// stop execution when elements does missing 
@@ -195,22 +195,22 @@
 			}
 			
 			// switch classes
-			if ($currentElement.hasClass('isActive')) {
-				$currentElement.removeClass('isActive');	
-				$currentTarget.removeClass('isActive');
+			if ($currentElement.hasClass('has-flag')) {
+				$currentElement.removeClass('has-flag');	
+				$currentTarget.removeClass('has-flag');
 
 				if ($currentElement.data('active-scope')) {
 					if ($currentScope.length) {
-						$currentScope.removeClass('isActive');
+						$currentScope.removeClass('has-flag');
 					}
 				}
 			} else {
-				$currentElement.addClass('isActive');	
-				$currentTarget.addClass('isActive');
+				$currentElement.addClass('has-flag');	
+				$currentTarget.addClass('has-flag');
 
 				if ($currentElement.data('active-scope')) {
 					if ($currentScope.length) {
-						$currentScope.addClass('isActive');
+						$currentScope.addClass('has-flag');
 					}
 				}
 			}
@@ -222,7 +222,7 @@
 	 * Universal hide function. Check if event's target matches given selectors or esc key is pressed.
 	 *
 	 * Example:
-	 * Helpers.basicHide(event, '.accordionItemHead, .accordionItemBody, .accordionItem');
+	 * Rookie.basicHide(event, '.accordionItemHead, .accordionItemBody, .accordionItem');
 	 * 
 	 * @public
 	 * @param  {event}
@@ -230,10 +230,9 @@
 	 * @return {void}
 	 *
 	 * @TODO:
-	 * - Change active class name.
 	 * - Add active class dynamically.
 	 */
-	Helpers.basicHide = function(evt, selector) {
+	Rookie.basicHide = function(evt, selector) {
 		// stop execution when parameters are not valid
 		if (typeof evt === undefined || !$(selector).length) {
 			// console.error('basicHide: Invalid parameters!');
@@ -243,7 +242,7 @@
 		var $target = $(evt.target);
 
 		if ((!$target.closest(selector).length) || (evt.keyCode == 27 /* esc key*/)) {
-			$(selector).removeClass('isActive');
+			$(selector).removeClass('has-flag');
 		}
 	};
 
@@ -261,7 +260,7 @@
 	 * @public
 	 * @return {void}
 	 */
-	Helpers.scrollToSelectorInit = function() {
+	Rookie.scrollToSelectorInit = function() {
 		var $triggers = $('[data-scrollto]');
 		var offsetTop = 0;
 
@@ -318,10 +317,9 @@
 	 *
 	 * @TODO:
 	 * - Need refactoring
-	 * - Change active classes names.
 	 * - Add optional url change.
 	 */
-	Helpers.tabsInit = function() {
+	Rookie.tabsInit = function() {
 		var $tabsTriggers = $('[data-tabs-trigger]');
 		var $tabsContents = $('[data-tabs-content]');
 
@@ -336,14 +334,14 @@
 			if (scope === "" || scope === undefined || scope === false) {
 				console.warn('tabsInit: Require "data-tabs-scope" attribute to handle multiple instances!', scope);
 
-				$tabsTriggers.removeClass('isActive');
-				$tabsContents.removeClass('isActive');
+				$tabsTriggers.removeClass('has-flag');
+				$tabsContents.removeClass('has-flag');
 				
 				for (var i = 0; i < $tabsTriggers.length; i++) {
 					var $current = $($tabsTriggers[i]);
 
 					if ($current.data('tabs-trigger') === id) {
-						$current.addClass('isActive');
+						$current.addClass('has-flag');
 					}
 				}
 
@@ -351,7 +349,7 @@
 					var $current = $($tabsContents[i]);
 
 					if ($current.data('tabs-content') === id) {
-						$current.addClass('isActive');
+						$current.addClass('has-flag');
 					}
 				}
 			} else {
@@ -359,10 +357,10 @@
 					var $current = $($tabsTriggers[i]);
 
 					if ($current.data('tabs-scope') === scope) {
-						$current.removeClass('isActive');
+						$current.removeClass('has-flag');
 					}
 					if ($current.data('tabs-trigger') === id && $current.data('tabs-scope') === scope) {
-						$current.addClass('isActive');
+						$current.addClass('has-flag');
 					}
 				}
 
@@ -370,10 +368,10 @@
 					var $current = $($tabsContents[i]);
 
 					if ($current.data('tabs-scope') === scope) {
-						$current.removeClass('isActive');
+						$current.removeClass('has-flag');
 					}
 					if ($current.data('tabs-content') === id && $current.data('tabs-scope') === scope) {
-						$current.addClass('isActive');
+						$current.addClass('has-flag');
 					}
 				}
 			}
@@ -387,13 +385,13 @@
 			var	id = $this.data('tabs-trigger');
 			var	scope = $this.data('tabs-scope');
 
-			if (!$this.hasClass('isActive')) {
+			if (!$this.hasClass('has-flag')) {
 				show(id, scope);
 			}
 		});
 		
 		// show active tabs after init
-		$tabsTriggers.filter('.isActive').each(function() {
+		$tabsTriggers.filter('.has-flag').each(function() {
 			var $this = $(this);
 
 			show($this.data('tabs-trigger'), $this.data('tabs-scope'));
@@ -412,9 +410,9 @@
 	 * @return {void}
 	 *
 	 * @TODO:
-	 * - Change active class name.
+	 * Need refactoring.
 	 */
-	Helpers.blinkFieldsInit = function() {
+	Rookie.blinkFieldsInit = function() {
 		var $inputs = $('[data-blink-scope]');
 		var $currentElement;
 		var scopeSelector;
@@ -443,9 +441,9 @@
 			checkSelector(scopeSelector);
 		
 			if($currentElement.val()) {
-				$currentElement.closest(scopeSelector).addClass('isActive');
+				$currentElement.closest(scopeSelector).addClass('has-flag');
 			} else {
-				$currentElement.closest(scopeSelector).removeClass('isActive');
+				$currentElement.closest(scopeSelector).removeClass('has-flag');
 			}
 		});
 
@@ -455,7 +453,7 @@
 
 			checkSelector(scopeSelector);
 
-			$currentElement.closest(scopeSelector).addClass('isActive');
+			$currentElement.closest(scopeSelector).addClass('has-flag');
 		}).on('focusout', function() {
 			$currentElement = $(this);
 			scopeSelector = $currentElement.data('blink-scope');
@@ -463,7 +461,7 @@
 			checkSelector(scopeSelector);
 
 			if(!$currentElement.val()) {
-				$currentElement.closest(scopeSelector).removeClass('isActive');
+				$currentElement.closest(scopeSelector).removeClass('has-flag');
 			}
 		});
 	};
@@ -482,9 +480,8 @@
 	 * @TO DO:
 	 * - Transform function to use data attributes.
 	 * - Change window reference.
-	 * - Change active classes names.
 	 */
-	Helpers.sticky = function(element, pivotTop, pivotBottom) {
+	Rookie.sticky = function(element, pivotTop, pivotBottom) {
 		var $element = $(element);
 		var $pivotTop = $(pivotTop);
 		var $pivotBottom = $(pivotBottom);
@@ -502,15 +499,15 @@
 		offsetBottom = $pivotBottom.offset().top;
 
 		if ($win.scrollTop() > offsetTop) {
-			$element.addClass('isSticky');
+			$element.addClass('is-sticky');
 		} else {
-			$element.removeClass('isSticky');
+			$element.removeClass('is-sticky');
 		}
 
 		if ($win.scrollTop() > offsetBottom - $element.outerHeight()) {
-			$element.addClass('hasBoundary');
+			$element.addClass('has-boundary');
 		} else {
-			$element.removeClass('hasBoundary');
+			$element.removeClass('has-boundary');
 		}
 	};
 
@@ -528,9 +525,8 @@
 	 * - Need refactoring.
 	 * - Transform function to use data attributes.
 	 * - Change window reference.
-	 * - Change active class name.
 	 */
-	Helpers.checkPosition = function(elements, removeClass) {
+	Rookie.checkPosition = function(elements, removeClass) {
 		// set default values
 		removeClass = (typeof removeClass == undefined) ? true : removeClass;
 		elements = (typeof elements == undefined) ? '.animate' : elements;
@@ -548,10 +544,10 @@
 
 			//check if this current container is within viewport
 			if ((elementBottomPos >= winTopPos) && (elementTopPos <= winBottomPos)) {
-				$element.addClass('isActive');
+				$element.addClass('has-flag');
 			} else {
 				if (removeClass) {
-					$element.removeClass('isActive');
+					$element.removeClass('has-flag');
 				}
 			}
 		});
@@ -569,7 +565,7 @@
 	 * - Need refactoring.
 	 * - Transform function to use data attributes.
 	 */
-	Helpers.photoChangerInit = function() {
+	Rookie.photoChangerInit = function() {
 		var $target = $('#jsPhotoChangerTarget');
 		var $triggers = $('.jsPhotoChangerTrigger');
 
